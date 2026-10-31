@@ -1,7 +1,10 @@
 """Read-only, project-owned framework inspection."""
 from __future__ import annotations
 import json
+import re
+from datetime import date
 from pathlib import Path
+from urllib.parse import urlsplit
 from importlib.resources import files
 from .semantic import evaluate, validate_rules
 from .plugin_checks import run as run_plugin_checks, validate_profile_checks
@@ -18,13 +21,26 @@ STANDARD_CANDIDATES = {
 }
 
 
+def _valid_project_path(value):
+    return (
+        isinstance(value, str) and bool(value)
+        and not value.startswith('/')
+        and not re.match(r'^[A-Za-z]:', value)
+        and '..' not in value.split('/')
+    )
+
+
 def _validate_manifest(obj, source):
     """Reject malformed declarations before using plugin metadata."""
-    if not isinstance(obj, dict) or not isinstance(obj.get('id'), str) or not obj['id'] or not isinstance(obj.get('version'), str) or not obj['version']:
+    if (not isinstance(obj, dict)
+            or not isinstance(obj.get('id'), str)
+            or not re.fullmatch(r'[a-z0-9][a-z0-9._-]*', obj['id'])
+            or not isinstance(obj.get('version'), str) or not obj['version']):
         raise ValueError('Invalid plugin identity: ' + source)
-    if not isinstance(obj.get('domain'), str) or not isinstance(obj.get('standards'), list) or not all(isinstance(x, str) and x for x in obj['standards']):
+    if (not isinstance(obj.get('domain'), str) or not obj['domain']
+            or not isinstance(obj.get('standards'), list) or not all(isinstance(x, str) and x for x in obj['standards'])):
         raise ValueError('Invalid plugin standards: ' + source)
-    if not isinstance(obj.get('detection'), list) or not all(isinstance(group, list) and group and all(isinstance(x, str) and x and not Path(x).is_absolute() and '..' not in Path(x).parts for x in group) for group in obj['detection']):
+    if not isinstance(obj.get('detection'), list) or not all(isinstance(group, list) and group and all(isinstance(x, str) and x and _valid_project_path(x) for x in group) for group in obj['detection']):
         raise ValueError('Invalid plugin detection: ' + source)
     globs = obj.get('detection_globs', [])
     if not isinstance(globs, list) or not all(
@@ -34,7 +50,7 @@ def _validate_manifest(obj, source):
     ):
         raise ValueError('Invalid plugin detection globs: ' + source)
     markers = obj.get('content_markers', [])
-    if not isinstance(markers, list) or not all(isinstance(x, dict) and isinstance(x.get('path'), str) and x['path'] and not Path(x['path']).is_absolute() and '..' not in Path(x['path']).parts and isinstance(x.get('contains'), str) and x['contains'] for x in markers):
+    if not isinstance(markers, list) or not all(isinstance(x, dict) and isinstance(x.get('path'), str) and x['path'] and _valid_project_path(x['path']) and isinstance(x.get('contains'), str) and x['contains'] for x in markers):
         raise ValueError('Invalid plugin content markers: ' + source)
     checks = obj.get('advisories', [])
     if not isinstance(checks, list):
@@ -43,16 +59,34 @@ def _validate_manifest(obj, source):
         if not isinstance(check, dict) or not all(isinstance(check.get(k), str) and check[k] for k in ('id', 'topic', 'recommendation')):
             raise ValueError('Invalid advisory declaration: ' + source)
         paths = check.get('any_paths')
-        if not isinstance(paths, list) or not paths or not all(isinstance(x, str) and x and not Path(x).is_absolute() and '..' not in Path(x).parts for x in paths):
+        if not isinstance(paths, list) or not paths or not all(isinstance(x, str) and _valid_project_path(x) for x in paths):
             raise ValueError('Invalid advisory paths: ' + source)
     guidance = obj.get('professional_guidance', [])
     if not isinstance(guidance, list) or not all(
-        isinstance(rule, dict) and all(isinstance(rule.get(k), str) and rule[k].strip()
-        and len(rule[k]) <= 512 for k in ('id', 'topic', 'signal', 'recommendation'))
+        isinstance(rule, dict) and all(isinstance(rule.get(k), str)
+        and 0 < len(rule[k]) <= 512 for k in ('id', 'topic', 'signal', 'recommendation'))
         and rule.get('source_suffix', '.cs' if obj['id']=='unity' else '.lua') in ('.cs','.lua','.asmdef')
         for rule in guidance
     ):
         raise ValueError('Invalid professional guidance: ' + source)
+    sources = obj.get('sources', [])
+    if not isinstance(sources, list):
+        raise ValueError('Invalid plugin sources: ' + source)
+    for item in sources:
+        if not isinstance(item, dict) or not all(
+            isinstance(item.get(k), str) and item[k]
+            for k in ('publisher', 'title', 'url', 'engine_versions', 'accessed')
+        ):
+            raise ValueError('Invalid plugin source declaration: ' + source)
+        parsed_url = urlsplit(item['url'])
+        try:
+            parsed_date = date.fromisoformat(item['accessed'])
+            if parsed_date.isoformat() != item['accessed']:
+                raise ValueError('Invalid date format')
+        except ValueError as exc:
+            raise ValueError('Invalid plugin source date: ' + source) from exc
+        if not parsed_url.scheme or any(ch.isspace() for ch in item['url']):
+            raise ValueError('Invalid plugin source URL: ' + source)
     return obj
 
 
