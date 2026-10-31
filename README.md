@@ -85,9 +85,9 @@ Follow the [bilingual best-practices walkthrough](docs/best-practices.md) for a 
 | Unity | asmdef graph, GUID and manifest context, lifecycle and assembly hints | Package resolution, Unity compilation or PlayMode correctness |
 | Skynet | Explicit transaction-source COMMIT/ROLLBACK, lock, version predicates and idempotency/replay evidence hints | Lua control-flow correctness or MySQL atomicity |
 | Art/UI | Selected standard clauses, implementation text, Unity asset-reference and Addressables relationships | Visual quality or runtime behavior |
-| Cocos Creator, C++, Asset Pipeline | Declarative discovery and standards-gap advice | Comparable implementation-level auditing |
+| Defold | Root-level `game.project` discovery (Candidate; no real-project validation) | Lua, Collection, asset dependency, build or runtime checks |\n| Cocos Creator, C++, Asset Pipeline | Declarative discovery and standards-gap advice | Comparable implementation-level auditing |
 
-Optional external manifests must be loaded explicitly with `--plugin-dir`; they never execute plugin code. Read the [extension contract](docs/plugin-extension-v1.md), [complete workflow](docs/v1-advisory-workflow.md) and documented workflow.
+Defold is a discovery-only Candidate; see the [Defold candidate scope](defold-candidate-v0.1.md). Optional external manifests must be loaded explicitly with `--plugin-dir`; they never execute plugin code. Read the [extension contract](docs/plugin-extension-v1.md), [complete workflow](docs/v1-advisory-workflow.md) and documented workflow.
 
 `evidence_found` and `observed` mean that bounded static evidence exists, not compliance. `not_evaluated` does not mean a violation. Missing standards and invalid references appear in `warnings`, while static review signals appear under guidance or structural observations and may leave `warnings` empty. `blocking=false` keeps all advisory results non-blocking. FrameForge does not perform formal project acceptance, release or deployment.
 
