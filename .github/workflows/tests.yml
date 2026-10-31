@@ -1,0 +1,55 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install build tools
+        run: python -m pip install --upgrade pip setuptools wheel jsonschema
+      - name: Run unit tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -q
+      - name: Build wheel
+        run: python -m pip wheel --no-deps --no-build-isolation -w dist .
+      - name: Verify wheel license metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          wheels = list(Path('dist').glob('*.whl'))
+          assert len(wheels) == 1, wheels
+          with ZipFile(wheels[0]) as archive:
+              names = archive.namelist()
+              assert any('.dist-info/' in name and name.endswith('/LICENSE') for name in names), names
+              metadata = next(archive.read(name).decode() for name in names if name.endswith('.dist-info/METADATA'))
+              assert 'Classifier: License :: OSI Approved :: Apache Software License' in metadata, metadata
+              assert 'License-File: LICENSE' in metadata, metadata
+          PY
+      - name: Validate plugin manifests
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import validate
+          schema = json.loads(Path('docs/plugin-manifest.schema.json').read_text())
+          manifests = list(Path('src/frameforge/manifests').glob('*.json'))
+          manifests += list(Path('examples/plugin-manifests').glob('*.json'))
+          for path in manifests:
+              validate(json.loads(path.read_text()), schema)
+          PY
