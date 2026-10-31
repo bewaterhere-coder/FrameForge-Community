@@ -59,7 +59,7 @@ def _validate_manifest(obj, source):
         if not isinstance(check, dict) or not all(isinstance(check.get(k), str) and check[k] for k in ('id', 'topic', 'recommendation')):
             raise ValueError('Invalid advisory declaration: ' + source)
         paths = check.get('any_paths')
-        if not isinstance(paths, list) or not paths or not all(isinstance(x, str) and x and not Path(x).is_absolute() and '..' not in Path(x).parts for x in paths):
+        if not isinstance(paths, list) or not paths or not all(isinstance(x, str) and _valid_project_path(x) for x in paths):
             raise ValueError('Invalid advisory paths: ' + source)
     guidance = obj.get('professional_guidance', [])
     if not isinstance(guidance, list) or not all(
