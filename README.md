@@ -36,9 +36,10 @@ CLI 保持 `frameforge /path/to/project`；如需 AI 客户端直接调用，可
 | Art/UI | 项目规范条款、实现文本和 Unity 资源引用与 Addressables 关系证据 | 需显式配置相关检查；不证明视觉质量或运行时表现 |
 | Godot | <code>project.godot</code> 项目发现；第三方 <code>addons/</code> 来源审查提示（Candidate，未做真实项目验证） | 不提供场景树、GDScript、资源导入或运行时检查 |
 | Unreal Engine | 根目录 <code>*.uproject</code> 发现；<code>Plugins/</code> 与 <code>Source/</code> 目录审查提示（Candidate，未做真实项目验证） | 不提供 C++/Blueprint 语义、UBT 构建或运行时检查 |
+| Defold | 根目录 <code>game.project</code> 发现（Candidate，未做真实项目验证） | 不提供 Lua、Collection、资源依赖、构建或运行时检查 |
 | Cocos Creator、C++、Asset Pipeline | 声明式发现与规范缺口提示 | 不提供等价于 Unity / Skynet 的专业实现检查 |
 
-外部插件通过 `--plugin-dir` 明确加载声明式 Manifest，**不会运行外部插件代码**，参见 [扩展契约](docs/plugin-extension-v1.md)。Godot 和 Unreal Engine 支持目前仅为 Candidate，分别见 [Godot 候选说明](docs/godot-candidate-v0.1.md) 与 [Unreal 候选说明](docs/unreal-engine-candidate-v0.1.md)。社区贡献者请先阅读[插件开发指南](docs/plugin-authoring-guide.md)，并使用[Manifest 示例](examples/plugin-manifests/example-engine.json)与[Schema](docs/plugin-manifest.schema.json)。插件发现不等于激活；缺失规范、无效引用等通过 `warnings` 提示；候选静态风险位于专业指导或结构观察字段，不一定进入 `warnings`。它们都不阻塞开发、提交或合并。
+外部插件通过 `--plugin-dir` 明确加载声明式 Manifest，**不会运行外部插件代码**，参见 [扩展契约](docs/plugin-extension-v1.md)。Godot 和 Unreal Engine 支持目前仅为 Candidate，分别见 [Godot 候选说明](docs/godot-candidate-v0.1.md)、[Unreal 候选说明](docs/unreal-engine-candidate-v0.1.md) 和 [Defold 候选说明](docs/defold-candidate-v0.1.md)。社区贡献者请先阅读[插件开发指南](docs/plugin-authoring-guide.md)，并使用[Manifest 示例](examples/plugin-manifests/example-engine.json)与[Schema](docs/plugin-manifest.schema.json)。插件发现不等于激活；缺失规范、无效引用等通过 `warnings` 提示；候选静态风险位于专业指导或结构观察字段，不一定进入 `warnings`。它们都不阻塞开发、提交或合并。
 
 ### 从零上手与跨系统协作
 
@@ -85,6 +86,7 @@ Follow the [bilingual best-practices walkthrough](docs/best-practices.md) for a 
 | Unity | asmdef graph, GUID and manifest context, lifecycle and assembly hints | Package resolution, Unity compilation or PlayMode correctness |
 | Skynet | Explicit transaction-source COMMIT/ROLLBACK, lock, version predicates and idempotency/replay evidence hints | Lua control-flow correctness or MySQL atomicity |
 | Art/UI | Selected standard clauses, implementation text, Unity asset-reference and Addressables relationships | Visual quality or runtime behavior |
+| Defold | Root-level `game.project` discovery (Candidate; no real-project validation) | Lua, Collection, asset dependency, build or runtime checks |
 | Cocos Creator, C++, Asset Pipeline | Declarative discovery and standards-gap advice | Comparable implementation-level auditing |
 
 Optional external manifests must be loaded explicitly with `--plugin-dir`; they never execute plugin code. Read the [extension contract](docs/plugin-extension-v1.md), [complete workflow](docs/v1-advisory-workflow.md) and documented workflow.

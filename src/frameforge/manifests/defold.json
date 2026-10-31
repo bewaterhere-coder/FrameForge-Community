@@ -1,0 +1,25 @@
+{
+  "id": "defold",
+  "version": "0.1.0",
+  "domain": "code",
+  "standards": [
+    "architecture",
+    "asset-pipeline"
+  ],
+  "evidence_level": "candidate",
+  "sources": [
+    {
+      "publisher": "Defold",
+      "title": "Project settings",
+      "url": "https://defold.com/manuals/project-settings/",
+      "engine_versions": "Current Defold documentation; version-specific behavior must be confirmed by project owner",
+      "accessed": "2026-11-01"
+    }
+  ],
+  "detection": [
+    [
+      "game.project"
+    ]
+  ],
+  "advisories": []
+}
