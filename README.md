@@ -97,8 +97,8 @@ Optional external manifests must be loaded explicitly with `--plugin-dir`; they 
 
 ### 贡献与候选插件
 
-欢迎社区提交游戏引擎、Art/UI、Asset Pipeline 规范候选。详见 [贡献指南](CONTRIBUTING.md)、[社区行为准则](CODE_OF_CONDUCT.md)、[引擎候选提案模板](.github/ISSUE_TEMPLATE/engine_candidate.md) 和 [安全报告规则](SECURITY.md)。候选规则不意味着真实工程验证通过；项目自有规范仍然优先。**本项目采用 Apache License 2.0，详见仓库根目录 `LICENSE`。**
+欢迎社区提交游戏引擎、Art/UI、Asset Pipeline 规范候选。详见 [贡献指南](CONTRIBUTING.md)、[社区维护指南](docs/community-maintenance-guide.md)、[社区行为准则](CODE_OF_CONDUCT.md)、[引擎候选提案模板](.github/ISSUE_TEMPLATE/engine_candidate.md) 和 [安全报告规则](SECURITY.md)。候选规则不意味着真实工程验证通过；项目自有规范仍然优先。**本项目采用 Apache License 2.0，详见仓库根目录 `LICENSE`。**
 
 ### Community contributions
 
-Contributions of engine, Art/UI and asset-pipeline guidance are welcome. See [Contributing](CONTRIBUTING.md), the [Code of Conduct](CODE_OF_CONDUCT.md), the [engine candidate template](.github/ISSUE_TEMPLATE/engine_candidate.md) and [Security Policy](SECURITY.md). Candidate guidance is not real-project validation, and project-owned standards remain authoritative. **This project is licensed under Apache License 2.0; see the root `LICENSE` file.**
+Contributions of engine, Art/UI and asset-pipeline guidance are welcome. See [Contributing](CONTRIBUTING.md), the [Community Maintenance Guide](docs/community-maintenance-guide.md), the [Code of Conduct](CODE_OF_CONDUCT.md), the [engine candidate template](.github/ISSUE_TEMPLATE/engine_candidate.md) and [Security Policy](SECURITY.md). Candidate guidance is not real-project validation, and project-owned standards remain authoritative. **This project is licensed under Apache License 2.0; see the root `LICENSE` file.**
