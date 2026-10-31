@@ -80,7 +80,9 @@ def _validate_manifest(obj, source):
             raise ValueError('Invalid plugin source declaration: ' + source)
         parsed_url = urlsplit(item['url'])
         try:
-            date.fromisoformat(item['accessed'])
+            parsed_date = date.fromisoformat(item['accessed'])
+            if parsed_date.isoformat() != item['accessed']:
+                raise ValueError('Invalid date format')
         except ValueError as exc:
             raise ValueError('Invalid plugin source date: ' + source) from exc
         if not parsed_url.scheme:
