@@ -27,7 +27,7 @@ def _validate_manifest(obj, source):
             or not isinstance(obj.get('version'), str) or not obj['version']):
         raise ValueError('Invalid plugin identity: ' + source)
     if (not isinstance(obj.get('domain'), str) or not obj['domain']
-            or not isinstance(obj.get('standards'), list) or not all(isinstance(x, str) and x for x in obj['standards']):
+            or not isinstance(obj.get('standards'), list) or not all(isinstance(x, str) and x for x in obj['standards'])):
         raise ValueError('Invalid plugin standards: ' + source)
     if not isinstance(obj.get('detection'), list) or not all(isinstance(group, list) and group and all(isinstance(x, str) and x and not Path(x).is_absolute() and '..' not in Path(x).parts for x in group) for group in obj['detection']):
         raise ValueError('Invalid plugin detection: ' + source)
