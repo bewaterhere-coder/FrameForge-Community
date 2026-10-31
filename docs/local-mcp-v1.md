@@ -10,7 +10,8 @@ FrameForge 同时提供 CLI、本地 MCP 和 Python API。三者共用 `framefor
 {
   "mcpServers": {
     "frameforge": {
-      "command": "frameforge-mcp",\n      "env": {"FRAMEFORGE_MCP_PROJECT_ROOTS": "/absolute/approved/project/root"}
+      "command": "frameforge-mcp",
+      "env": {"FRAMEFORGE_MCP_PROJECT_ROOTS": "/absolute/approved/project/root"}
     }
   }
 }
