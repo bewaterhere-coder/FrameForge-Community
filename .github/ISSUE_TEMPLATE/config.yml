@@ -7,5 +7,5 @@ contact_links:
     url: https://github.com/bewaterhere-coder/FrameForge-Community/blob/main/docs/community-maintenance-guide.md
     about: Understand Candidate/Validated evidence and maintainer review.
   - name: Security vulnerability reporting
-    url: https://github.com/bewaterhere-coder/FrameForge-Community/security/advisories/new
+    url: https://github.com/bewaterhere-coder/FrameForge-Community/blob/main/SECURITY.md
     about: Report vulnerabilities privately; do not disclose exploit details in public issues.
