@@ -48,7 +48,7 @@ class PluginExtensionTests(unittest.TestCase):
             manifests(self.plugins)
 
     def test_manifest_paths_reject_windows_backslash_traversal(self):
-        self.add('backslash-path', {'id': 'backslash-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['..\\\\outside\\\\project']]})
+        self.add('backslash-path', {'id': 'backslash-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [[r'..\outside\project']]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
             manifests(self.plugins)
 
