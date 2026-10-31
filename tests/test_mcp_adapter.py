@@ -1,5 +1,6 @@
 """MCP tool parity is verified without importing the optional SDK in CLI tests."""
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -72,6 +73,37 @@ class MCPAdapterTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 server.tools['verify_remediation'](d, [{'code': 'X'}])
 
+
+    def test_inspect_for_acceptance_tool_uses_commit_bound_host_api(self):
+        import sys
+        import types
+        sdk = types.ModuleType('mcp')
+        server_module = types.ModuleType('mcp.server')
+        fastmcp_module = types.ModuleType('mcp.server.mcpserver')
+        fastmcp_module.MCPServer = FakeMCP
+        with patch.dict(sys.modules, {'mcp': sdk, 'mcp.server': server_module,
+                                      'mcp.server.mcpserver': fastmcp_module}):
+            server = create_server()
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'CMakeLists.txt').write_text('project(AcceptanceDemo)\\n')
+            def git(*args):
+                return subprocess.check_output(['git', '-C', directory, *args], text=True).strip()
+            git('init', '-q')
+            git('config', 'user.email', 'test@example.invalid')
+            git('config', 'user.name', 'FrameForge Test')
+            git('add', 'CMakeLists.txt')
+            git('commit', '-qm', 'test fixture')
+            expected = git('rev-parse', 'HEAD')
+
+            result = server.tools['inspect_for_acceptance'](directory, expected)
+            self.assertEqual(result['repository_commit'], expected)
+            self.assertFalse(result['formal_acceptance'])
+            self.assertFalse(result['compliance_verified'])
+            self.assertFalse(result['blocking'])
+            with self.assertRaisesRegex(ValueError, 'does not match'):
+                server.tools['inspect_for_acceptance'](directory, '0' * 40)
 
     def test_mcp_2_sdk_registers_and_calls_tools(self):
         import asyncio
