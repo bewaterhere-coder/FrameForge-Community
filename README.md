@@ -45,7 +45,7 @@ PYTHONPATH=src python -m unittest discover -s tests -q
 
 ### 通过 AI Host 使用
 
-在已授权项目目录和可用的 Python 环境中，用户可以直接对连接了项目环境的 AI 说：**“检查这个项目的框架规范，告诉我已绑定的规范、候选文档、需要确认的事项和未评估的检查。”** AI Host 可调用 `frameforge.host_adapter.inspect_project(project)`，并使用 `explain_warnings` 解读 Warning、`verify_remediation` 重新检查。三者均只读。这些接口需要由已连接且获授权的 Host 调用；没有环境连接的 AI 不能仅靠自然语言访问用户本机项目。
+在已授权项目目录和可用的 Python 环境中，用户可以直接对连接了项目环境的 AI 说：**“检查这个项目的框架规范，告诉我已绑定的规范、候选文档、需要确认的事项和未评估的检查。”** AI Host 可调用 `frameforge.host_adapter` 的 `inspect_project`、`explain_warnings`、`verify_remediation` 进行只读检查；需要将检查绑定到指定 Git 提交时，可使用 `inspect_for_acceptance`（要求仓库根目录、完整 40 位 Commit SHA 和干净工作区）。该接口只提供验收辅助证据，不作正式验收。这些接口需要由已连接且获授权的 Host 调用；没有环境连接的 AI 不能仅靠自然语言访问用户本机项目。
 
 结果应优先解释 `suggested_plugins`（仅发现、未自动启用）、`standard_sources`（已绑定引用不等于 Owner 已批准）、`standard_candidates`（有限文件名候选，可能误报/遗漏）、`standard_authority_review`（仅列待确认关系，不判断内容冲突）、`clause_coverage`（没有检查规则时为空；证据命中也不是合规 PASS），最后区分 `warnings`、专业审查建议与 `blocking=false`。项目负责人自行确认插件选择、正式规范和改动授权。详见 [自然语言使用案例与验收边界](docs/ai-host-end-to-end-v1.md)。
 
@@ -117,7 +117,7 @@ The optional `mcp` extra is only needed when running the local stdio MCP server.
 
 ### Use through a connected AI host
 
-With an authorized project environment and Python host, ask the AI to inspect the project's framework standards. The host can invoke `frameforge.host_adapter.inspect_project`, `explain_warnings`, and `verify_remediation` as read-only operations. These APIs require a connected, authorized host; a disconnected assistant cannot access local projects. Plugin discovery does not activate plugins; candidate standards do not imply approval; filename domain hints are not content-level conflict checks; empty clause coverage does not imply compliance. See [end-to-end workflow and acceptance boundaries](docs/ai-host-end-to-end-v1.md).
+With an authorized project environment and Python host, ask the AI to inspect the project's framework standards. The host can invoke `frameforge.host_adapter.inspect_project`, `explain_warnings`, and `verify_remediation` as read-only operations. For a commit-bound advisory snapshot, it may use `inspect_for_acceptance`, which requires the repository root, a full 40-character commit SHA, and a clean working tree; this is not formal acceptance. These APIs require a connected, authorized host; a disconnected assistant cannot access local projects. Plugin discovery does not activate plugins; candidate standards do not imply approval; filename domain hints are not content-level conflict checks; empty clause coverage does not imply compliance. See [end-to-end workflow and acceptance boundaries](docs/ai-host-end-to-end-v1.md).
 
 ### Local MCP and CLI
 
