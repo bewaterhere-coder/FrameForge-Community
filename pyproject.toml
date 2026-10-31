@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "frameforge"
+name = "frameforge-community"
 version = "0.1.0"
 description = "Optional project framework discovery and standards advisory"
 license = { file = "LICENSE" }
