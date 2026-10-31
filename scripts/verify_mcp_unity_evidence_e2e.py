@@ -17,12 +17,12 @@ async def main():
                 tool_list=await client.list_tools(); assert 'inspect_project' in [t.name for t in tool_list.tools]
                 obs={'GUID:'+'a'*32:{'status':'observed_in_package_cache','package':'com.unity.addressables'}}
                 result=await client.call_tool('inspect_project',{'project':d,'unity_external_evidence':obs})
-                assert not result.isError, result
-                data=result.structuredContent or json.loads(result.content[0].text)
+                assert not result.is_error, result
+                data=result.structured_content or json.loads(result.content[0].text)
                 item=data['structural_observations'][0]['unresolved_reference_context'][0]
                 assert item['external_evidence']==obs['GUID:'+'a'*32],item
                 assert item['resolution']=='unverified' and data['blocking']==False
                 failed=await client.call_tool('inspect_project',{'project':'/etc','unity_external_evidence':obs})
-                assert failed.isError,failed
+                assert failed.is_error,failed
                 print('MCP_STDIO_E2E_PASS tools='+str(len(tool_list.tools))+' evidence=1 resolution=unverified root_guard=PASS')
 asyncio.run(main())
