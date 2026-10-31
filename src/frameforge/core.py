@@ -63,7 +63,7 @@ def _validate_manifest(obj, source):
             raise ValueError('Invalid advisory paths: ' + source)
     guidance = obj.get('professional_guidance', [])
     if not isinstance(guidance, list) or not all(
-        isinstance(rule, dict) and all(isinstance(rule.get(k), str) and rule[k].strip()
+        isinstance(rule, dict) and all(isinstance(rule.get(k), str)
         and 0 < len(rule[k]) <= 512 for k in ('id', 'topic', 'signal', 'recommendation'))
         and rule.get('source_suffix', '.cs' if obj['id']=='unity' else '.lua') in ('.cs','.lua','.asmdef')
         for rule in guidance
@@ -85,7 +85,7 @@ def _validate_manifest(obj, source):
                 raise ValueError('Invalid date format')
         except ValueError as exc:
             raise ValueError('Invalid plugin source date: ' + source) from exc
-        if not parsed_url.scheme:
+        if not parsed_url.scheme or any(ch.isspace() for ch in item['url']):
             raise ValueError('Invalid plugin source URL: ' + source)
     return obj
 
