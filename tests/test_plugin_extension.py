@@ -53,7 +53,7 @@ class PluginExtensionTests(unittest.TestCase):
             manifests(self.plugins)
 
     def test_manifest_paths_reject_nul_character(self):
-        self.add('nul-path', {'id': 'nul-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['bad\\x00path']]})
+        self.add('nul-path', {'id': 'nul-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['bad\x00path']]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
             manifests(self.plugins)
 
