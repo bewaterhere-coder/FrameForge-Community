@@ -4,7 +4,7 @@
 
 > **Define your own game architecture. Let FrameForge help keep it consistent.**
 
-[Explore the project homepage](docs/index.html) · [Run the minimal Godot sample](examples/sample-game-godot/) · [Read the best practices](docs/best-practices.md)
+[Explore the project homepage](docs/index.html) · [Run the minimal Godot sample](examples/sample-game-godot/) · [Run the real CLI demo](docs/demo-walkthrough.md) · [Read the best practices](docs/best-practices.md)
 
 ![FrameForge project workflow](docs/site-assets/architecture-flow.svg)
 
@@ -86,7 +86,7 @@ FrameForge is a standalone, read-only project framework discovery and standards 
 
 ### Quick start
 
-Prefer a working example first? Run the [Godot Sample Game](examples/sample-game-godot/) and inspect its project-owned Profile and standards.
+Prefer a working example first? Run the [Godot Sample Game](examples/sample-game-godot/), follow the [real CLI demo](docs/demo-walkthrough.md), and inspect its project-owned Profile and standards.
 
 
 Requirements: Python 3.10+ and Git. Install from the public GitHub repository (a PyPI package is not published yet):

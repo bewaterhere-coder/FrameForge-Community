@@ -1,0 +1,27 @@
+
+=== 1. Discover available guidance ===
+- asset-pipeline 1.0.0 [Available]
+- defold 0.1.0 [Candidate]
+- unity 1.0.0 [Available]
+- godot 0.1.0 [Candidate]
+- art-ui 1.0.0 [Available]
+- skynet 1.0.0 [Available]
+- unreal-engine 0.1.0 [Candidate]
+- cpp 1.0.0 [Available]
+- cocos-creator 1.0.0 [Available]
+Total: 9 plugin manifests
+
+=== 2. Inspect the sample game ===
+Project: FrameForge Sample Game (Godot 4)
+Suggested plugins:
+- godot 0.1.0 (suggested)
+Explicitly selected plugins:
+- godot 0.1.0
+Project-owned standards:
+- architecture: docs/architecture.md
+- asset-pipeline: docs/asset-pipeline.md
+Advisory items: 1
+- Third-party addon ownership: review_recommended (file_presence_only)
+Warnings: 0
+Blocking: false
+Scope: read-only static advisory; Godot editor/build/runtime are not executed.
