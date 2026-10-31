@@ -2,7 +2,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="frameforge",
+    name="frameforge-community",
     version="0.1.0",
     description="Optional project framework discovery and standards advisory",
     license="Apache-2.0",

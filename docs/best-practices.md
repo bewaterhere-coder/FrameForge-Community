@@ -7,10 +7,14 @@
 ### 1. 安装与首次检查
 
 ```sh
-python -m pip install frameforge
+git clone https://github.com/bewaterhere-coder/FrameForge-Community.git
+cd FrameForge-Community
+python -m pip install .
 frameforge --plugins
-frameforge /path/to/project
+frameforge /path/to/your/game-project
 ```
+
+当前从 GitHub 源码安装，尚未发布 PyPI 包。不要使用 `pip install frameforge`：PyPI 上已有同名的其他项目。
 
 首次检查先识别技术栈、候选插件和规范缺口。发现插件不代表启用插件；首次扫描不会修改项目。
 
@@ -90,10 +94,14 @@ This guide explains how to introduce FrameForge into one or more repositories, b
 ### 1. Install and inspect
 
 ```sh
-python -m pip install frameforge
+git clone https://github.com/bewaterhere-coder/FrameForge-Community.git
+cd FrameForge-Community
+python -m pip install .
 frameforge --plugins
-frameforge /path/to/project
+frameforge /path/to/your/game-project
 ```
+
+Install from GitHub source for now; no PyPI release is available. Do not run `pip install frameforge`: that name is already used by an unrelated PyPI project.
 
 The first inspection discovers technology markers, candidate plugins and possible standards gaps. Discovery does not activate plugins or modify the project.
 
