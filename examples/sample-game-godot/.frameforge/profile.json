@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "selected_plugins": [
+    {
+      "id": "godot",
+      "version": "0.1.0"
+    }
+  ],
+  "standards": {
+    "architecture": "docs/architecture.md",
+    "asset-pipeline": "docs/asset-pipeline.md"
+  }
+}

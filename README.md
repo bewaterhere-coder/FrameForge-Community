@@ -2,11 +2,18 @@
 
 **插件化项目框架与规范指导 / Pluggable Project Framework Intelligence**
 
-FrameForge 是独立的、只读的框架发现与规范建议工具。项目拥有自己的规范真源；技术栈发现时可提供候选插件和路径级建议；只有显式选择插件后才运行相应的专业检查。 Core 职责与插件边界见 [Core 架构基线](docs/core-responsibility-and-plugin-boundary-v1.md)。
+> **Define your own game architecture. Let FrameForge help keep it consistent.**
+
+[Explore the project homepage](docs/index.html) · [Run the minimal Godot sample](examples/sample-game-godot/) · [Read the best practices](docs/best-practices.md)
+
+![FrameForge project workflow](docs/site-assets/architecture-flow.svg)
 
 ## 中文
 
 ### 快速开始
+
+想先看一个完整的最小游戏项目？运行 [Godot Sample Game](examples/sample-game-godot/)，查看它自己的 Profile、架构规范和资源规范。
+
 
 需要 Python 3.10+ 和 Git。当前先从 GitHub 源码安装（尚未提供 PyPI 安装包）：
 
@@ -78,6 +85,9 @@ CLI 保持 `frameforge /path/to/project`；如需 AI 客户端直接调用，可
 FrameForge is a standalone, read-only project framework discovery and standards advisory tool. Projects own their canonical standards. Discovery may return path-level advisory previews but never activates professional checks, and findings never create a development gate. See the [Core responsibility and plugin boundary](docs/core-responsibility-and-plugin-boundary-v1.md).
 
 ### Quick start
+
+Prefer a working example first? Run the [Godot Sample Game](examples/sample-game-godot/) and inspect its project-owned Profile and standards.
+
 
 Requirements: Python 3.10+ and Git. Install from the public GitHub repository (a PyPI package is not published yet):
 

@@ -66,3 +66,29 @@ jobs:
         run: python -m pip install --upgrade pip && python -m pip install -e '.[mcp]'
       - name: Verify local MCP stdio, evidence forwarding and path guard
         run: PYTHONPATH=src python scripts/verify_mcp_unity_evidence_e2e.py
+
+  sample-project-advisory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Install FrameForge
+        run: python -m pip install .
+      - name: Verify the public sample project
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from frameforge.core import inspect
+
+          result = inspect(Path("examples/sample-game-godot"))
+          assert any(item["plugin_id"] == "godot" for item in result["suggested_plugins"]), result
+          assert result["selected_plugins"] == [{"id": "godot", "version": "0.1.0"}], result
+          assert result["standards"]["architecture"] == "docs/architecture.md", result
+          assert result["standards"]["asset-pipeline"] == "docs/asset-pipeline.md", result
+          assert result["blocking"] is False, result
+          assert not any(item["code"] == "PROFILE_INVALID" for item in result["warnings"]), result
+          print("SAMPLE_PROJECT_ADVISORY_PASS plugin=godot profile=loaded standards=2 blocking=false")
+          PY
