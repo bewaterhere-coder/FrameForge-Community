@@ -8,14 +8,33 @@ FrameForge 是独立的、只读的框架发现与规范建议工具。项目拥
 
 ### 快速开始
 
+需要 Python 3.10+ 和 Git。当前先从 GitHub 源码安装（尚未提供 PyPI 安装包）：
+
 ```sh
-python -m pip install -e .
-frameforge --plugins
-frameforge /path/to/project
-python -m unittest discover -s tests -q
+git clone https://github.com/bewaterhere-coder/FrameForge-Community.git
+cd FrameForge-Community
+python -m pip install .
 ```
 
-首次检查只会发现技术栈和报告规范缺口，不会修改项目或自动启用插件。要启用专业检查，在**项目自身**建立 `.frameforge/profile.json`，明确填写插件 ID、版本和项目正式规范路径，格式参见 [Profile 示例](docs/profile-example.json)。检查命令仍为 `frameforge /path/to/project`。
+检查插件清单，再把路径替换成你自己的 Unity 或其他游戏项目目录：
+
+```sh
+frameforge --plugins
+frameforge /path/to/your/game-project
+```
+
+首次检查只会发现技术栈和报告规范缺口，不会修改项目或自动启用插件。要启用专业检查，在**项目自身**建立 `.frameforge/profile.json`，明确填写插件 ID、版本和项目正式规范路径，格式参见 [Profile 示例](docs/profile-example.json)。检查命令仍为 `frameforge /path/to/your/game-project`。
+
+### 贡献者开发环境
+
+```sh
+python -m pip install -e '.[mcp]'
+PYTHONPATH=src python -m unittest discover -s tests -q
+```
+
+只有开发或运行本地 stdio MCP Server 时才需要安装可选的 `mcp` 依赖。普通使用者只需按上面的快速开始安装。
+
+> 当前发布方式是从 GitHub 源码安装；PyPI 发布尚未进行。普通使用者不需要安装开发依赖或运行测试套件。
 
 ### 通过 AI Host 使用
 
@@ -58,14 +77,31 @@ FrameForge is a standalone, read-only project framework discovery and standards 
 
 ### Quick start
 
+Requirements: Python 3.10+ and Git. Install from the public GitHub repository (a PyPI package is not published yet):
+
 ```sh
-python -m pip install -e .
-frameforge --plugins
-frameforge /path/to/project
-python -m unittest discover -s tests -q
+git clone https://github.com/bewaterhere-coder/FrameForge-Community.git
+cd FrameForge-Community
+python -m pip install .
 ```
 
-Inspection does not write to a project. For opt-in checks, create a project-owned `.frameforge/profile.json` with explicit plugin IDs/versions and canonical standard references; see the [profile example](docs/profile-example.json).
+List available plugins, then inspect your own Unity or other game project:
+
+```sh
+frameforge --plugins
+frameforge /path/to/your/game-project
+```
+
+Inspection is read-only and does not activate plugins. For opt-in checks, create a project-owned `.frameforge/profile.json` with explicit plugin IDs/versions and canonical standard references; see the [profile example](docs/profile-example.json). Ordinary users do not need development dependencies or the test suite.
+
+### Contributor setup and tests
+
+```sh
+python -m pip install -e '.[mcp]'
+PYTHONPATH=src python -m unittest discover -s tests -q
+```
+
+The optional `mcp` extra is only needed when running the local stdio MCP server.
 
 ### Use through a connected AI host
 
@@ -97,8 +133,8 @@ Optional external manifests must be loaded explicitly with `--plugin-dir`; they 
 
 ### 贡献与候选插件
 
-欢迎社区提交游戏引擎、Art/UI、Asset Pipeline 规范候选。详见 [贡献指南](CONTRIBUTING.md)、[社区维护指南](docs/community-maintenance-guide.md)、[社区行为准则](CODE_OF_CONDUCT.md)、[引擎候选提案模板](.github/ISSUE_TEMPLATE/engine_candidate.md) 和 [安全报告规则](SECURITY.md)。候选规则不意味着真实工程验证通过；项目自有规范仍然优先。**本项目采用 Apache License 2.0，详见仓库根目录 `LICENSE`。**
+欢迎社区提交游戏引擎、Art/UI、Asset Pipeline 规范候选。详见 [贡献指南](CONTRIBUTING.md)、[社区维护指南](docs/community-maintenance-guide.md)、[社区行为准则](CODE_OF_CONDUCT.md)、[引擎候选提案模板](.github/ISSUE_TEMPLATE/engine_candidate.md) 、[安全报告规则](SECURITY.md) 和 [GitHub Discussions](https://github.com/bewaterhere-coder/FrameForge-Community/discussions)。候选规则不意味着真实工程验证通过；项目自有规范仍然优先。**本项目采用 Apache License 2.0，详见仓库根目录 `LICENSE`。**
 
 ### Community contributions
 
-Contributions of engine, Art/UI and asset-pipeline guidance are welcome. See [Contributing](CONTRIBUTING.md), the [Community Maintenance Guide](docs/community-maintenance-guide.md), the [Code of Conduct](CODE_OF_CONDUCT.md), the [engine candidate template](.github/ISSUE_TEMPLATE/engine_candidate.md) and [Security Policy](SECURITY.md). Candidate guidance is not real-project validation, and project-owned standards remain authoritative. **This project is licensed under Apache License 2.0; see the root `LICENSE` file.**
+Contributions of engine, Art/UI and asset-pipeline guidance are welcome. See [Contributing](CONTRIBUTING.md), the [Community Maintenance Guide](docs/community-maintenance-guide.md), the [Code of Conduct](CODE_OF_CONDUCT.md), the [engine candidate template](.github/ISSUE_TEMPLATE/engine_candidate.md) and [Security Policy](SECURITY.md), and [GitHub Discussions](https://github.com/bewaterhere-coder/FrameForge-Community/discussions). Candidate guidance is not real-project validation, and project-owned standards remain authoritative. **This project is licensed under Apache License 2.0; see the root `LICENSE` file.**
