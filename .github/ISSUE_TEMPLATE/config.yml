@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Contribution and plugin authoring guide
+    url: https://github.com/bewaterhere-coder/FrameForge-Community/blob/main/CONTRIBUTING.md
+    about: Read the contribution process before opening a proposal.
+  - name: Community maintenance guide
+    url: https://github.com/bewaterhere-coder/FrameForge-Community/blob/main/docs/community-maintenance-guide.md
+    about: Understand Candidate/Validated evidence and maintainer review.
+  - name: Security vulnerability reporting
+    url: https://github.com/bewaterhere-coder/FrameForge-Community/security/advisories/new
+    about: Report vulnerabilities privately; do not disclose exploit details in public issues.
