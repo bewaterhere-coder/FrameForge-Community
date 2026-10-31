@@ -46,6 +46,8 @@ PYTHONPATH=src python -m unittest discover -s tests -q
 
 CLI 保持 `frameforge /path/to/project`；如需 AI 客户端直接调用，可安装 `python -m pip install -e '.[mcp]'` 并将 `frameforge-mcp` 注册为本地 stdio MCP Server。两者共用同一只读核心。配置示例及安全边界见 [Local MCP V1](docs/local-mcp-v1.md)。
 
+能力实现边界、验证等级与后续扩展顺序见[内置专业能力与扩展边界](docs/built-in-capability-boundaries-v1.md)。
+
 ### 内置插件能力
 
 | 插件 | 当前能力 | 重要边界 |
@@ -114,6 +116,8 @@ The optional local stdio MCP entrypoint is `frameforge-mcp` (`pip install -e '.[
 ### End-to-end tutorial
 
 Follow the [bilingual best-practices walkthrough](docs/best-practices.md) for a multi-repository project: discover, explicitly select plugins, bind project-owned standards, invoke CLI/MCP/AI host, review evidence, and use the project's existing remediation and acceptance process. The report is supplemental evidence, not an automatic gate or formal acceptance decision. Missing access must be reported as not evaluated.
+
+See [built-in capability boundaries and extension stages](docs/built-in-capability-boundaries-v1.md) for implementation ownership, evidence levels and extension order.
 
 ### Built-in capability matrix
 
