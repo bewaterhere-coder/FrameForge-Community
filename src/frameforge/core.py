@@ -4,10 +4,7 @@ import json
 from pathlib import Path
 from importlib.resources import files
 from .semantic import evaluate, validate_rules
-from .art_ui_evidence import validate as validate_art_ui_implementation
-from .art_ui_unity_binding import validate as validate_art_ui_unity_binding
-from .art_ui_standards import validate_art_ui_checks
-from .plugin_checks import run as run_plugin_checks
+from .plugin_checks import run as run_plugin_checks, validate_profile_checks
 from .remediation import advise as advise_warnings
 from .custom_standards import summarize as summarize_custom_standards
 from .standards_discovery import discover as discover_project_standards
@@ -221,28 +218,10 @@ def inspect(project, plugin_dir=None, profile_data=None, unity_external_evidence
             if not all(isinstance(k, str) and isinstance(v, str) for k, v in standards.items()):
                 raise ValueError('standards must be string references')
             rules = validate_rules(profile.get('semantic_rules', []))
-            try:
-                art_ui_checks = validate_art_ui_checks(profile.get('art_ui_checks', []), project_file)
-            except ValueError as exc:
-                warnings.append({'code': 'ART_UI_CHECKS_INVALID', 'message': str(exc)})
-                art_ui_checks = []
-            try:
-                art_ui_implementation_checks = validate_art_ui_implementation(
-                    profile.get('art_ui_implementation_checks', []), {c['id'] for c in art_ui_checks})
-                standard_ref = standards.get('art-ui')
-                if standard_ref and any(
-                    project_file(root, check['path']) == project_file(root, standard_ref)
-                    for check in art_ui_implementation_checks
-                ):
-                    raise ValueError('implementation evidence cannot reuse the authoritative Art/UI standard file')
-            except ValueError as exc:
-                warnings.append({'code':'ART_UI_IMPLEMENTATION_CHECKS_INVALID','message':str(exc)})
-                art_ui_implementation_checks = []
-            if 'art_ui_unity_binding' in profile:
-                try:
-                    art_ui_unity_binding = validate_art_ui_unity_binding(profile['art_ui_unity_binding'])
-                except ValueError as exc:
-                    warnings.append({'code': 'ART_UI_UNITY_BINDING_INVALID', 'message': str(exc)})
+            (art_ui_checks, art_ui_implementation_checks,
+             art_ui_unity_binding, check_warnings) = validate_profile_checks(
+                profile, root, standards, project_file)
+            warnings.extend(check_warnings)
             structural_paths = profile.get('structural_paths', {})
             if not isinstance(structural_paths, dict) or any(
                 k != 'skynet_transaction' or not isinstance(v, str) or not v
