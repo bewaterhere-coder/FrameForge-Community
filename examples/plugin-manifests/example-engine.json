@@ -1,0 +1,24 @@
+{
+  "id": "example-engine",
+  "version": "0.1.0",
+  "domain": "code",
+  "standards": ["architecture"],
+  "detection": [
+    ["project.config"]
+  ],
+  "content_markers": [
+    {
+      "path": "project.config",
+      "contains": "example-engine"
+    }
+  ],
+  "advisories": [
+    {
+      "id": "example-project-layout",
+      "topic": "Project layout",
+      "any_paths": ["src", "scripts"],
+      "recommendation": "Review the project-owned architecture standard and document module boundaries."
+    }
+  ],
+  "professional_guidance": []
+}

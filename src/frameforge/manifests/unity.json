@@ -1,0 +1,64 @@
+{
+  "id": "unity",
+  "version": "1.0.0",
+  "domain": "code",
+  "standards": [
+    "architecture"
+  ],
+  "detection": [
+    [
+      "ProjectSettings/ProjectVersion.txt"
+    ]
+  ],
+  "advisories": [
+    {
+      "id": "unity-root",
+      "topic": "MonoBehaviour root and lifecycle",
+      "any_paths": [
+        "Assets/Code/CompositionRoot.cs",
+        "Assets/Scripts/CompositionRoot.cs"
+      ],
+      "recommendation": "Use one composition root and centrally dispatch Update; review extra MonoBehaviours before adding them."
+    },
+    {
+      "id": "unity-asmdef",
+      "topic": "Assembly boundaries",
+      "any_paths": [
+        "Assets/Core/Core.asmdef"
+      ],
+      "recommendation": "Define assembly references and dependency direction; avoid cross-feature coupling."
+    },
+    {
+      "id": "unity-ui",
+      "topic": "UI architecture",
+      "any_paths": [
+        "Assets/UI/ScreenNavigator.cs"
+      ],
+      "recommendation": "Document UI navigation, lifecycle, async cancellation, and asset release; compare existing screen navigator location before adding another."
+    },
+    {
+      "id": "unity-testing",
+      "topic": "EditMode/PlayMode test coverage",
+      "any_paths": [
+        "Assets/Tests/PlayMode/PlayModeTests.asmdef",
+        "Assets/Tests/EditMode/Editor/ScreenLifecycleAssertions.cs"
+      ],
+      "recommendation": "Identify actual EditMode and PlayMode test assemblies and document critical lifecycle and failure-case tests."
+    }
+  ],
+  "professional_guidance": [
+    {
+      "id": "unity-lifecycle",
+      "topic": "Lifecycle ownership",
+      "signal": "MonoBehaviour",
+      "recommendation": "Review central update ownership, scene transitions and unsubscribe/teardown paths."
+    },
+    {
+      "id": "unity-assemblies",
+      "topic": "Assembly dependency boundaries",
+      "signal": "\"references\"",
+      "recommendation": "Review asmdef dependency direction, test isolation and cyclic feature references.",
+      "source_suffix": ".asmdef"
+    }
+  ]
+}

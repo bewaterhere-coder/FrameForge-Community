@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FrameForge External Plugin Manifest",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "domain",
+    "standards",
+    "detection"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "standards": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "detection": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/$defs/projectPath"
+        }
+      }
+    },
+    "content_markers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "contains"
+        ],
+        "properties": {
+          "path": {
+            "$ref": "#/$defs/projectPath"
+          },
+          "contains": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "advisories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "topic",
+          "recommendation",
+          "any_paths"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "topic": {
+            "type": "string",
+            "minLength": 1
+          },
+          "recommendation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "any_paths": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/projectPath"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "professional_guidance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "topic",
+          "signal",
+          "recommendation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "topic": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "signal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "recommendation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "source_suffix": {
+            "enum": [
+              ".cs",
+              ".lua",
+              ".asmdef"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "evidence_level": {
+      "enum": [
+        "candidate",
+        "validated"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "publisher",
+          "title",
+          "url",
+          "engine_versions",
+          "accessed"
+        ],
+        "properties": {
+          "publisher": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "engine_versions": {
+            "type": "string",
+            "minLength": 1
+          },
+          "accessed": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "detection_globs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[^/\\\\]+$"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "projectPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    }
+  }
+}

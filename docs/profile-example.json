@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "selected_plugins": [
+    {
+      "id": "unity",
+      "version": "1.0.0"
+    },
+    {
+      "id": "art-ui",
+      "version": "1.0.0"
+    }
+  ],
+  "standards": {
+    "architecture": "docs/architecture.md",
+    "art-ui": "docs/art-direction.md"
+  },
+  "check_clauses": {
+    "unity-event-cleanup": {
+      "id": "PROJECT-ROOT-LIFECYCLE-R1",
+      "reference": "docs/architecture.md",
+      "text": "Unsubscribe registered network events when root is destroyed."
+    }
+  }
+}

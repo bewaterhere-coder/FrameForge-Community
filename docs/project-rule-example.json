@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "selected_plugins": [{"id": "unity", "version": "1.0.0"}],
+  "standards": {"architecture": "docs/architecture.md"},
+  "semantic_rules": [{
+    "id": "project-lifecycle-events",
+    "plugin_id": "unity",
+    "topic": "Lifecycle event cleanup",
+    "language": "csharp",
+    "paths": ["Assets/Scripts/Root.cs"],
+    "tokens": ["ExampleEvent += Handler;", "ExampleEvent -= Handler;"],
+    "recommendation": "Check shutdown paths and run lifecycle tests."
+  }]
+}

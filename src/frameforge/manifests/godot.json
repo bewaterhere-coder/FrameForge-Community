@@ -1,0 +1,55 @@
+{
+  "id": "godot",
+  "version": "0.1.0",
+  "domain": "code",
+  "standards": [
+    "architecture",
+    "asset-pipeline"
+  ],
+  "evidence_level": "candidate",
+  "sources": [
+    {
+      "publisher": "Godot Engine",
+      "title": "Project organization",
+      "url": "https://docs.godotengine.org/en/stable/tutorials/best_practices/project_organization.html",
+      "engine_versions": "Godot 4.x stable documentation",
+      "accessed": "2026-11-01"
+    },
+    {
+      "publisher": "Godot Engine",
+      "title": "Nodes and Scenes",
+      "url": "https://docs.godotengine.org/en/stable/getting_started/step_by_step/nodes_and_scenes.html",
+      "engine_versions": "Godot 4.x stable documentation",
+      "accessed": "2026-11-01"
+    },
+    {
+      "publisher": "Godot Engine",
+      "title": "Scene organization",
+      "url": "https://docs.godotengine.org/en/stable/tutorials/best_practices/scene_organization.html",
+      "engine_versions": "Godot 4.x stable documentation",
+      "accessed": "2026-11-01"
+    },
+    {
+      "publisher": "Godot Engine",
+      "title": "Import process",
+      "url": "https://docs.godotengine.org/en/stable/tutorials/assets_pipeline/import_process.html",
+      "engine_versions": "Godot 4.x stable documentation",
+      "accessed": "2026-11-01"
+    }
+  ],
+  "detection": [
+    [
+      "project.godot"
+    ]
+  ],
+  "advisories": [
+    {
+      "id": "godot-addons",
+      "topic": "Third-party addon ownership",
+      "any_paths": [
+        "addons"
+      ],
+      "recommendation": "Review third-party addon provenance, license, supported Godot version and update ownership. Addons directory presence alone does not establish a dependency or compliance issue."
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"id":"cocos-creator","version":"1.0.0","domain":"code","standards":["architecture"],"detection":[["settings","assets","project.json"],["settings","assets","package.json","cocos.config.json"]]}

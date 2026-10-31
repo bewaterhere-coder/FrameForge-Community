@@ -1,0 +1,32 @@
+{
+  "id": "art-ui",
+  "version": "1.0.0",
+  "domain": "visual",
+  "standards": ["art-ui"],
+  "detection": [
+    ["Assets/Art/UI"],
+    ["Assets/Prefabs/UI"],
+    ["ui/assets"],
+    ["assets/ui"]
+  ],
+  "advisories": [
+    {
+      "id": "art-ui-shared-components",
+      "topic": "Reusable UI assets",
+      "any_paths": ["Assets/Art/UI/Common", "Assets/Prefabs/UI/Common", "ui/assets/common", "assets/ui/common"],
+      "recommendation": "Review existing shared UI assets before importing duplicate buttons, frames or icons; check the project's own common-asset rules."
+    },
+    {
+      "id": "art-ui-layout-safety",
+      "topic": "Aspect ratio and safe areas",
+      "any_paths": ["Assets/Tests/PlayMode", "tests/ui", "ui/tests", "docs/ui-layout.md"],
+      "recommendation": "Check the project's supported orientations, aspect ratios, safe-area constraints and minimum touch target sizes with real UI captures or tests."
+    },
+    {
+      "id": "art-ui-asset-delivery",
+      "topic": "Asset import and release lifecycle",
+      "any_paths": ["Assets/AddressableAssetsData", "assets/resources", "ui/assets"],
+      "recommendation": "Verify import settings, ownership, loading failure, release on view close and reuse of existing assets; file presence does not establish correctness."
+    }
+  ]
+}

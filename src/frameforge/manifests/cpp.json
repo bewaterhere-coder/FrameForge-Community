@@ -1,0 +1,1 @@
+{"id":"cpp","version":"1.0.0","domain":"code","standards":["architecture"],"detection":[["CMakeLists.txt"],["meson.build"]]}

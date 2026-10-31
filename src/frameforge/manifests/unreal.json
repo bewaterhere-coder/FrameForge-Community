@@ -1,0 +1,62 @@
+{
+  "id": "unreal-engine",
+  "version": "0.1.0",
+  "domain": "code",
+  "standards": [
+    "architecture",
+    "asset-pipeline"
+  ],
+  "evidence_level": "candidate",
+  "sources": [
+    {
+      "publisher": "Epic Games",
+      "title": "Working with Projects and Templates",
+      "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/working-with-projects-and-templates-in-unreal-engine",
+      "engine_versions": "Unreal Engine 5.8 documentation",
+      "accessed": "2026-11-01"
+    },
+    {
+      "publisher": "Epic Games",
+      "title": "Unreal Engine Directory Structure",
+      "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-directory-structure",
+      "engine_versions": "Unreal Engine 5.8 documentation",
+      "accessed": "2026-11-01"
+    },
+    {
+      "publisher": "Epic Games",
+      "title": "Unreal Engine Modules",
+      "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-modules",
+      "engine_versions": "Unreal Engine 5.8 documentation",
+      "accessed": "2026-11-01"
+    },
+    {
+      "publisher": "Epic Games",
+      "title": "Plugins in Unreal Engine",
+      "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/plugins-in-unreal-engine",
+      "engine_versions": "Unreal Engine 5.8 documentation",
+      "accessed": "2026-11-01"
+    }
+  ],
+  "detection": [],
+  "advisories": [
+    {
+      "id": "unreal-project-plugins",
+      "topic": "Project plugin provenance",
+      "any_paths": [
+        "Plugins"
+      ],
+      "recommendation": "Review project plugin descriptors, source/binary availability, engine-version compatibility, license and ownership. A Plugins directory alone does not prove a problem."
+    },
+    {
+      "id": "unreal-source-modules",
+      "topic": "C++ module boundaries",
+      "any_paths": [
+        "Source"
+      ],
+      "recommendation": "For C++ projects, review module boundaries and Build.cs dependencies against the project-owned architecture standard. Blueprint-only projects do not require a Source directory."
+    }
+  ],
+  "detection_globs": [
+    "*.uproject"
+  ]
+}

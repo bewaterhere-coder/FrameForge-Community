@@ -1,0 +1,79 @@
+{
+  "id": "skynet",
+  "version": "1.0.0",
+  "domain": "code",
+  "standards": [
+    "architecture"
+  ],
+  "detection": [
+    [
+      "skynet-src/skynet.h"
+    ],
+    [
+      "3rd/skynet/skynet-src/skynet.h"
+    ],
+    [
+      "service",
+      "lualib",
+      "skynet"
+    ]
+  ],
+  "content_markers": [
+    {
+      "path": "Dockerfile",
+      "contains": "cloudwu/skynet"
+    },
+    {
+      "path": "service/main.lua",
+      "contains": "require \"skynet\""
+    }
+  ],
+  "advisories": [
+    {
+      "id": "skynet-bootstrap",
+      "topic": "Service startup and supervision",
+      "any_paths": [
+        "service/main.lua"
+      ],
+      "recommendation": "Document service startup order, restart policy, and failure containment; review actual service topology."
+    },
+    {
+      "id": "skynet-worker",
+      "topic": "Actor ownership and concurrency",
+      "any_paths": [
+        "service/actor.lua"
+      ],
+      "recommendation": "Document actor ownership, mailbox serialization, cross-worker routing and replay/idempotency boundaries."
+    },
+    {
+      "id": "skynet-persistence",
+      "topic": "Transaction and persistence",
+      "any_paths": [
+        "service/persistence.lua"
+      ],
+      "recommendation": "Review transaction rollback, uncertain COMMIT, retry and restart recovery; bind each rule to authoritative server contracts."
+    },
+    {
+      "id": "skynet-protocol",
+      "topic": "Sproto boundary",
+      "any_paths": [
+        "service/gateway.lua"
+      ],
+      "recommendation": "Document schema/version ownership, decode errors, dispatch and backward compatibility."
+    }
+  ],
+  "professional_guidance": [
+    {
+      "id": "skynet-actors",
+      "topic": "Actor service ownership",
+      "signal": "skynet.start",
+      "recommendation": "Review service mailbox ownership, isolation and message-failure paths."
+    },
+    {
+      "id": "skynet-storage",
+      "topic": "Persistence boundary",
+      "signal": "START TRANSACTION",
+      "recommendation": "Verify atomic update, replay, rollback and unknown COMMIT outcomes with database tests."
+    }
+  ]
+}

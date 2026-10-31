@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "frameforge"
+version = "0.1.0"
+description = "Optional project framework discovery and standards advisory"
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.0,<2"]
+
+[project.scripts]
+frameforge = "frameforge.cli:main"
+frameforge-mcp = "frameforge.mcp_server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"frameforge.manifests" = ["*.json"]
