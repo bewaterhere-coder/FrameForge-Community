@@ -60,6 +60,12 @@ class FrameworkTests(unittest.TestCase):
         (drive / 'outside.md').write_text('must not be bound')
         self.assertIn('STANDARD_UNAVAILABLE', [w['code'] for w in inspect(self.root)['warnings']])
 
+    def test_profile_nul_path_is_reported_as_unavailable(self):
+        self.profile([{'id':'cpp','version':'1.0.0'}], {'architecture': 'docs/arch\x00itecture.md'})
+        result = inspect(self.root)
+        self.assertIn('STANDARD_UNAVAILABLE', [w['code'] for w in result['warnings']])
+        self.assertFalse(result['blocking'])
+
     def test_profile_invalid_nonblocking(self):
         p=self.root/'.frameforge/profile.json';p.parent.mkdir();p.write_text('{bad')
         r=inspect(self.root);self.assertFalse(r['blocking']);self.assertEqual(r['warnings'][0]['code'],'PROFILE_INVALID')

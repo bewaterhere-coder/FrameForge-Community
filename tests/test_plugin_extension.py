@@ -52,6 +52,11 @@ class PluginExtensionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
             manifests(self.plugins)
 
+    def test_manifest_paths_reject_nul_character(self):
+        self.add('nul-path', {'id': 'nul-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['bad\x00path']]})
+        with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
+            manifests(self.plugins)
+
     def test_manifest_paths_reject_windows_drive_prefix(self):
         self.add('drive-path', {'id': 'drive-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['C:/outside/project']]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
