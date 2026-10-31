@@ -29,11 +29,18 @@ from . import host_adapter
 def create_server():
     """Create tools lazily so the base CLI needs no MCP dependency."""
     try:
-        from mcp.server.fastmcp import FastMCP
+        try:
+            # MCP Python SDK 2.x renamed FastMCP to MCPServer.
+            from mcp.server.mcpserver import MCPServer
+            server_factory = MCPServer
+        except ImportError:
+            # Keep compatibility with SDK 1.x for existing hosts during migration.
+            from mcp.server.fastmcp import FastMCP
+            server_factory = FastMCP
     except ImportError as exc:
-        raise RuntimeError('MCP extra missing: install frameforge[mcp]') from exc
+        raise RuntimeError('MCP extra missing: install frameforge-community[mcp]') from exc
 
-    server = FastMCP("FrameForge")
+    server = server_factory(name="FrameForge")
 
     @server.tool()
     def list_plugins(plugin_dir: str | None = None) -> dict:
