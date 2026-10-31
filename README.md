@@ -39,7 +39,7 @@ CLI 保持 `frameforge /path/to/project`；如需 AI 客户端直接调用，可
 | Defold | 根目录 <code>game.project</code> 发现（Candidate，未做真实项目验证） | 不提供 Lua、Collection、资源依赖、构建或运行时检查 |
 | Cocos Creator、C++、Asset Pipeline | 声明式发现与规范缺口提示 | 不提供等价于 Unity / Skynet 的专业实现检查 |
 
-外部插件通过 `--plugin-dir` 明确加载声明式 Manifest，**不会运行外部插件代码**，参见 [扩展契约](docs/plugin-extension-v1.md)。Godot 和 Unreal Engine 支持目前仅为 Candidate，分别见 [Godot 候选说明](docs/godot-candidate-v0.1.md) 与 [Unreal 候选说明](docs/unreal-engine-candidate-v0.1.md)、[Defold 候选说明](docs/defold-candidate-v0.1.md)。社区贡献者请先阅读[插件开发指南](docs/plugin-authoring-guide.md)，并使用[Manifest 示例](examples/plugin-manifests/example-engine.json)与[Schema](docs/plugin-manifest.schema.json)。插件发现不等于激活；缺失规范、无效引用等通过 `warnings` 提示；候选静态风险位于专业指导或结构观察字段，不一定进入 `warnings`。它们都不阻塞开发、提交或合并。
+外部插件通过 `--plugin-dir` 明确加载声明式 Manifest，**不会运行外部插件代码**，参见 [扩展契约](docs/plugin-extension-v1.md)。Godot 和 Unreal Engine 支持目前仅为 Candidate，分别见 [Godot 候选说明](docs/godot-candidate-v0.1.md) 与 [Unreal 候选说明](docs/unreal-engine-candidate-v0.1.md) 及 [Defold 候选说明](docs/defold-candidate-v0.1.md)。社区贡献者请先阅读[插件开发指南](docs/plugin-authoring-guide.md)，并使用[Manifest 示例](examples/plugin-manifests/example-engine.json)与[Schema](docs/plugin-manifest.schema.json)。插件发现不等于激活；缺失规范、无效引用等通过 `warnings` 提示；候选静态风险位于专业指导或结构观察字段，不一定进入 `warnings`。它们都不阻塞开发、提交或合并。
 
 ### 从零上手与跨系统协作
 
@@ -86,9 +86,10 @@ Follow the [bilingual best-practices walkthrough](docs/best-practices.md) for a 
 | Unity | asmdef graph, GUID and manifest context, lifecycle and assembly hints | Package resolution, Unity compilation or PlayMode correctness |
 | Skynet | Explicit transaction-source COMMIT/ROLLBACK, lock, version predicates and idempotency/replay evidence hints | Lua control-flow correctness or MySQL atomicity |
 | Art/UI | Selected standard clauses, implementation text, Unity asset-reference and Addressables relationships | Visual quality or runtime behavior |
-| Defold | Root-level `game.project` discovery (Candidate; no real-project validation) | Lua, Collection, asset dependency, build or runtime checks |\n| Cocos Creator, C++, Asset Pipeline | Declarative discovery and standards-gap advice | Comparable implementation-level auditing |
+| Defold | Root-level `game.project` discovery (Candidate; no real-project validation) | Lua, Collection, asset dependency, build or runtime checks |
+| Cocos Creator, C++, Asset Pipeline | Declarative discovery and standards-gap advice | Comparable implementation-level auditing |
 
-Defold is a discovery-only Candidate; see the [Defold candidate scope](docs/defold-candidate-v0.1.md). Optional external manifests must be loaded explicitly with `--plugin-dir`; they never execute plugin code. Read the [extension contract](docs/plugin-extension-v1.md), [complete workflow](docs/v1-advisory-workflow.md) and documented workflow.
+Optional external manifests must be loaded explicitly with `--plugin-dir`; they never execute plugin code. Read the [extension contract](docs/plugin-extension-v1.md), [complete workflow](docs/v1-advisory-workflow.md) and documented workflow.
 
 `evidence_found` and `observed` mean that bounded static evidence exists, not compliance. `not_evaluated` does not mean a violation. Missing standards and invalid references appear in `warnings`, while static review signals appear under guidance or structural observations and may leave `warnings` empty. `blocking=false` keeps all advisory results non-blocking. FrameForge does not perform formal project acceptance, release or deployment.
 
