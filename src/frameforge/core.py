@@ -25,6 +25,7 @@ def _valid_project_path(value):
     return (
         isinstance(value, str) and bool(value)
         and not value.startswith('/') and '\\' not in value
+        and '\\x00' not in value
         and not re.match(r'^[A-Za-z]:', value)
         and '..' not in value.split('/')
     )
@@ -192,8 +193,11 @@ def manifests(plugin_dir=None):
 def project_file(root, rel):
     if not _valid_project_path(rel) or Path(rel).is_absolute():
         return None
-    path = (root / rel).resolve()
-    return path if path.is_relative_to(root.resolve()) else None
+    try:
+        path = (root / rel).resolve()
+        return path if path.is_relative_to(root.resolve()) else None
+    except (OSError, RuntimeError, ValueError):
+        return None
 
 
 def detect(root, manifest):
