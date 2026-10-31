@@ -61,7 +61,7 @@ class FrameworkTests(unittest.TestCase):
         self.assertIn('STANDARD_UNAVAILABLE', [w['code'] for w in inspect(self.root)['warnings']])
 
     def test_profile_nul_path_is_reported_as_unavailable(self):
-        self.profile([{'id':'cpp','version':'1.0.0'}], {'architecture': 'docs/arch\\x00itecture.md'})
+        self.profile([{'id':'cpp','version':'1.0.0'}], {'architecture': 'docs/arch\x00itecture.md'})
         result = inspect(self.root)
         self.assertIn('STANDARD_UNAVAILABLE', [w['code'] for w in result['warnings']])
         self.assertFalse(result['blocking'])
