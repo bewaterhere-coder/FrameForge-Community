@@ -12,7 +12,11 @@
 4. 添加正例、负例、缺失与边界测试；运行 `PYTHONPATH=src python -m unittest discover -s tests -q`。CLI 和 MCP 应保持相同的只读、显式选择、非阻塞语义。
 5. 提交 PR，附官方引用、版本范围、风险与限制、测试命令和实际输出。由维护者评审；提交 PR 不代表接受规范或批准发布。
 
-### 社区维护与评审\n\nCandidate / Validated 的升级条件、Issue 分类、PR 评审清单、版本兼容和维护者交接，统一见[社区维护指南](docs/community-maintenance-guide.md)。Validated 由维护者依据真实项目证据确认，不由贡献者自行声明。\n\n### 插件约束
+### 社区维护与评审
+
+Candidate / Validated 的升级条件、Issue 分类、PR 评审清单、版本兼容和维护者交接，统一见[社区维护指南](docs/community-maintenance-guide.md)。Validated 由维护者依据真实项目证据确认，不由贡献者自行声明。
+
+### 插件约束
 
 - Discovery 不等于 Activation；必须由使用者显式选择。
 - 候选插件不能修改项目文件，不能自动绑定标准，不能引入额外 Gate。
