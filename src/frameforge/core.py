@@ -190,7 +190,7 @@ def manifests(plugin_dir=None):
 
 
 def project_file(root, rel):
-    if not isinstance(rel, str) or not rel or Path(rel).is_absolute() or '..' in Path(rel).parts:
+    if not _valid_project_path(rel) or Path(rel).is_absolute():
         return None
     path = (root / rel).resolve()
     return path if path.is_relative_to(root.resolve()) else None
