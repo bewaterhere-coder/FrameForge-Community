@@ -47,6 +47,20 @@ class PluginExtensionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Invalid plugin standards'):
             manifests(self.plugins)
 
+    def test_manifest_paths_reject_windows_drive_prefix(self):
+        self.add('drive-path', {'id': 'drive-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['C:/outside/project']]})
+        with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
+            manifests(self.plugins)
+
+    def test_manifest_sources_validate_required_fields_and_date(self):
+        self.add('bad-source', {'id': 'bad-source', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'sources': [{'publisher': 'Example', 'title': 'Guide', 'url': 'https://example.com', 'engine_versions': '1.x', 'accessed': 'not-a-date'}]})
+        with self.assertRaisesRegex(ValueError, 'Invalid plugin source date'):
+            manifests(self.plugins)
+
+    def test_manifest_professional_guidance_accepts_schema_nonempty_whitespace(self):
+        self.add('guidance-space', {'id': 'guidance-space', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'professional_guidance': [{'id': ' ', 'topic': ' ', 'signal': ' ', 'recommendation': ' '}]})
+        self.assertIn('guidance-space', manifests(self.plugins))
+
     def test_bad_manifest_rejected(self):
         self.add('broken', {'id': 'broken', 'version':'1.0.0', 'domain':'code', 'standards':'not-a-list', 'detection':[]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin manifest'):
