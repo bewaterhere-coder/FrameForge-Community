@@ -37,6 +37,16 @@ class PluginExtensionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Duplicate plugin'):
             manifests(self.plugins)
 
+    def test_manifest_id_must_match_public_schema(self):
+        self.add('bad-id', {'id': 'Bad ID', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']]})
+        with self.assertRaisesRegex(ValueError, 'Invalid plugin identity'):
+            manifests(self.plugins)
+
+    def test_manifest_domain_must_be_nonempty(self):
+        self.add('empty-domain', {'id': 'empty-domain', 'version': '1.0.0', 'domain': '', 'standards': ['architecture'], 'detection': [['custom.project']]})
+        with self.assertRaisesRegex(ValueError, 'Invalid plugin standards'):
+            manifests(self.plugins)
+
     def test_bad_manifest_rejected(self):
         self.add('broken', {'id': 'broken', 'version':'1.0.0', 'domain':'code', 'standards':'not-a-list', 'detection':[]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin manifest'):
