@@ -1,6 +1,7 @@
 """Read-only, project-owned framework inspection."""
 from __future__ import annotations
 import json
+import re
 from pathlib import Path
 from importlib.resources import files
 from .semantic import evaluate, validate_rules
@@ -20,9 +21,13 @@ STANDARD_CANDIDATES = {
 
 def _validate_manifest(obj, source):
     """Reject malformed declarations before using plugin metadata."""
-    if not isinstance(obj, dict) or not isinstance(obj.get('id'), str) or not obj['id'] or not isinstance(obj.get('version'), str) or not obj['version']:
+    if (not isinstance(obj, dict)
+            or not isinstance(obj.get('id'), str)
+            or not re.fullmatch(r'[a-z0-9][a-z0-9._-]*', obj['id'])
+            or not isinstance(obj.get('version'), str) or not obj['version']):
         raise ValueError('Invalid plugin identity: ' + source)
-    if not isinstance(obj.get('domain'), str) or not isinstance(obj.get('standards'), list) or not all(isinstance(x, str) and x for x in obj['standards']):
+    if (not isinstance(obj.get('domain'), str) or not obj['domain']
+            or not isinstance(obj.get('standards'), list) or not all(isinstance(x, str) and x for x in obj['standards']):
         raise ValueError('Invalid plugin standards: ' + source)
     if not isinstance(obj.get('detection'), list) or not all(isinstance(group, list) and group and all(isinstance(x, str) and x and not Path(x).is_absolute() and '..' not in Path(x).parts for x in group) for group in obj['detection']):
         raise ValueError('Invalid plugin detection: ' + source)
