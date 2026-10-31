@@ -48,6 +48,18 @@ class FrameworkTests(unittest.TestCase):
     def test_path_escape_warning(self):
         self.profile([{'id':'cpp','version':'1.0.0'}],{'architecture':'../outside.md'})
         self.assertEqual(inspect(self.root)['warnings'][0]['code'],'STANDARD_UNAVAILABLE')
+    def test_profile_rejects_windows_backslash_path(self):
+        self.profile([{'id':'cpp','version':'1.0.0'}], {'architecture': r'..\\outside.md'})
+        (self.root / r'..\\outside.md').write_text('must not be bound')
+        self.assertIn('STANDARD_UNAVAILABLE', [w['code'] for w in inspect(self.root)['warnings']])
+
+    def test_profile_rejects_windows_drive_path(self):
+        self.profile([{'id':'cpp','version':'1.0.0'}], {'architecture': 'C:/outside.md'})
+        drive = self.root / 'C:'
+        drive.mkdir()
+        (drive / 'outside.md').write_text('must not be bound')
+        self.assertIn('STANDARD_UNAVAILABLE', [w['code'] for w in inspect(self.root)['warnings']])
+
     def test_profile_invalid_nonblocking(self):
         p=self.root/'.frameforge/profile.json';p.parent.mkdir();p.write_text('{bad')
         r=inspect(self.root);self.assertFalse(r['blocking']);self.assertEqual(r['warnings'][0]['code'],'PROFILE_INVALID')
