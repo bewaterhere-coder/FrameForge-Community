@@ -4,7 +4,7 @@
 
 > **Define your own game architecture. Let FrameForge help keep it consistent.**
 
-[Explore the project homepage](docs/index.html) · [Run the minimal Godot sample](examples/sample-game-godot/) · [Run the real CLI demo](docs/demo-walkthrough.md) · [Read the best practices](docs/best-practices.md)
+[Explore the project homepage](docs/index.html) · [Run the minimal Godot sample](examples/sample-game-godot/) · [Run the real CLI demo](docs/demo-walkthrough.md) · [First public launch kit](docs/first-public-launch-kit.md) · [Read the best practices](docs/best-practices.md)
 
 ![FrameForge project workflow](docs/site-assets/architecture-flow.svg)
 
