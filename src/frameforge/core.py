@@ -25,7 +25,7 @@ def _valid_project_path(value):
     return (
         isinstance(value, str) and bool(value)
         and not value.startswith('/') and '\\' not in value
-        and '\\x00' not in value
+        and '\x00' not in value
         and not re.match(r'^[A-Za-z]:', value)
         and '..' not in value.split('/')
     )
