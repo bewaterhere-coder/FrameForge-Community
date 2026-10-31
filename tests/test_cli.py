@@ -23,7 +23,7 @@ class CliTests(unittest.TestCase):
     def test_project_inspection_matches_core_and_does_not_write(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / "CMakeLists.txt").write_text("project(CliDemo)\\n")
+            (root / "CMakeLists.txt").write_text("project(CliDemo)\n")
             before = sorted(path.relative_to(root).as_posix()
                             for path in root.rglob("*") if path.is_file())
             expected = inspect(root)
