@@ -359,8 +359,9 @@ def inspect(project, plugin_dir=None, profile_data=None, unity_external_evidence
         if len(lines) == 1:
             binding['clause_line'] = lines[0]
             binding['clause_excerpt'] = clause['text']
-    professional = [entry for suggestion in found if suggestion['plugin_id'] in chosen
-                    for entry in professional_preview(root, catalog[suggestion['plugin_id']])]
+    # Discovery only recommends plugins; explicit Profile selection controls guidance activation.
+    professional = [entry for plugin_id in sorted(chosen)
+                    for entry in professional_preview(root, catalog[plugin_id])]
     art_ui_gaps, art_ui_implementation, art_ui_unity_binding_evidence, structural = run_plugin_checks(
         root, chosen, found, standards, art_ui_checks, art_ui_implementation_checks,
         art_ui_unity_binding, structural_paths, project_file, unity_external_evidence)
