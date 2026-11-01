@@ -66,6 +66,16 @@ class FrameworkTests(unittest.TestCase):
         self.assertIn('STANDARD_UNAVAILABLE', [w['code'] for w in result['warnings']])
         self.assertFalse(result['blocking'])
 
+    def test_profile_duplicate_plugin_ids_are_invalid_nonblocking(self):
+        self.profile([
+            {'id':'cpp','version':'1.0.0'},
+            {'id':'cpp','version':'1.0.0'},
+        ])
+        result = inspect(self.root)
+        self.assertIn('PROFILE_INVALID', [w['code'] for w in result['warnings']])
+        self.assertFalse(result['blocking'])
+        self.assertEqual(result['selected_plugins'], [])
+
     def test_profile_invalid_nonblocking(self):
         p=self.root/'.frameforge/profile.json';p.parent.mkdir();p.write_text('{bad')
         r=inspect(self.root);self.assertFalse(r['blocking']);self.assertEqual(r['warnings'][0]['code'],'PROFILE_INVALID')
