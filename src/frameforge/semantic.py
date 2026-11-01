@@ -17,9 +17,9 @@ def evaluate(root, rule):
             continue
         # Comment filtering is intentionally conservative; not a language parser.
         language = rule["language"]
-        pattern = (r'//[^\\n]*|/\\*[\\s\\S]*?\\*/' if language == "csharp"
-                   else r'--\\[\\[[\\s\\S]*?\\]\\]|--[^\\n]*')
-        source = re.sub(pattern, lambda m: re.sub(r'[^\\n]', ' ', m.group()), source)
+        pattern = (r'//[^\n]*|/\*[\s\S]*?\*/' if language == "csharp"
+                   else r'--\[\[[\s\S]*?\]\]|--[^\n]*')
+        source = re.sub(pattern, lambda m: re.sub(r'[^\n]', ' ', m.group()), source)
         sources.append((relative, source))
 
     if not sources:
