@@ -11,6 +11,19 @@ class FrameworkTests(unittest.TestCase):
     def profile(self, plugins, standards=None):
         p=self.root/'.frameforge/profile.json';p.parent.mkdir(exist_ok=True)
         p.write_text(json.dumps({'schema_version':1,'selected_plugins':plugins,'standards':standards or {}}))
+    def test_documented_profile_example_matches_core_contract(self):
+        example = Path(__file__).resolve().parents[1] / 'docs/profile-example.json'
+        profile_data = example.read_text(encoding='utf-8')
+        result = inspect(self.root, profile_data=profile_data)
+        self.assertEqual(
+            {item['id'] for item in result['selected_plugins']},
+            {'unity', 'art-ui'},
+        )
+        self.assertNotIn('PROFILE_INVALID', [item['code'] for item in result['warnings']])
+        self.assertEqual(result['standards']['architecture'], 'docs/architecture.md')
+        self.assertEqual(result['standards']['art-ui'], 'docs/art-direction.md')
+        self.assertFalse(result['blocking'])
+
     def test_empty_nonblocking(self):
         r=inspect(self.root);self.assertFalse(r['blocking']);self.assertEqual(r['warnings'][0]['code'],'PROFILE_MISSING')
     def test_discovery_does_not_activate(self):
