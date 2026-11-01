@@ -47,6 +47,8 @@ frameforge /path/to/your/game-project
 
 以上仅为格式示例；插件 ID、版本和规范路径必须以实际项目为准。
 
+若配置 `semantic_rules`，每条规则的 `plugin_id` 必须对应仓库中可用的插件，并且该插件必须在当前 Profile 中显式选择，版本也必须与插件清单一致。未知插件、未选择插件或版本不匹配会产生非阻塞 Warning；插件未被自动发现时，显式选择的规则仍会保留为 `not_evaluated`，不会静默消失。
+
 ### 4. 多仓库项目
 
 多仓库项目可以在每个仓库分别维护 Profile，也可以由项目约定一个明确的规范仓库，并在各代码仓库中绑定其版本化副本或受控引用。不要让一个仓库的 Profile 隐式覆盖另一个仓库；不要将项目规范复制到 FrameForge 全局目录。
@@ -114,6 +116,8 @@ Useful topics include architecture and module boundaries, UI/art conventions, as
 ### 3. Select plugins and bind standards explicitly
 
 Create `.frameforge/profile.json` at the project root. Select only the plugins needed by that project and bind canonical standards paths. Do not create empty standards or enable unrelated plugins merely to silence warnings. See the [Profile example](profile-example.json) and [plugin authoring guide](plugin-authoring-guide.md).
+
+If you configure `semantic_rules`, each rule's `plugin_id` must identify an available plugin explicitly selected in the current Profile, with a version matching its manifest. Unknown, unselected or version-mismatched plugins produce non-blocking warnings. If an explicitly selected plugin is not discovered automatically, its rule remains visible as `not_evaluated` instead of silently disappearing.
 
 ### 4. Multi-repository projects
 
