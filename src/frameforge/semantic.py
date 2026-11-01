@@ -4,8 +4,9 @@ from pathlib import Path
 
 
 def evaluate(root, rule):
-    """Observe declared literals; never claim control-flow or contract compliance."""
+    """Observe declared literals across bounded source paths; never claim control-flow compliance."""
     root = Path(root).resolve()
+    sources = []
     for relative in rule["paths"]:
         path = (root / relative).resolve()
         if not path.is_relative_to(root) or not path.is_file() or path.stat().st_size > 500_000:
@@ -19,31 +20,39 @@ def evaluate(root, rule):
         pattern = (r'//[^\n]*|/\*[\s\S]*?\*/' if language == "csharp"
                    else r'--\[\[[\s\S]*?\]\]|--[^\n]*')
         source = re.sub(pattern, lambda m: re.sub(r'[^\n]', ' ', m.group()), source)
-        evidence = []
-        missing = []
-        for token in rule["tokens"]:
-            lines = [i for i, line in enumerate(source.splitlines(), 1) if token in line]
-            if lines:
-                evidence.append({"path": relative, "line": lines[0], "token": token})
-            else:
-                missing.append(token)
+        sources.append((relative, source))
+
+    if not sources:
         return {
             "plugin_id": rule["plugin_id"], "check_id": rule["id"],
-            "standard_topic": rule["topic"],
-            "status": "review_needed" if missing else "pattern_observed_control_flow_unverified",
-            "evidence": evidence, "missing_tokens": missing,
-            "recommendation": rule["recommendation"],
-            "confidence": "bounded_literal_scan",
+            "standard_topic": rule["topic"], "status": "not_evaluated",
+            "evidence": [], "missing_tokens": [],
+            "recommendation": rule["recommendation"], "confidence": "no_source",
             "activation": "explicit_project_rule",
         }
+
+    evidence = []
+    missing = []
+    for token in rule["tokens"]:
+        match = next((
+            {"path": relative, "line": line_number, "token": token}
+            for relative, source in sources
+            for line_number, line in enumerate(source.splitlines(), 1)
+            if token in line
+        ), None)
+        if match:
+            evidence.append(match)
+        else:
+            missing.append(token)
     return {
         "plugin_id": rule["plugin_id"], "check_id": rule["id"],
-        "standard_topic": rule["topic"], "status": "not_evaluated",
-        "evidence": [], "missing_tokens": [],
-        "recommendation": rule["recommendation"], "confidence": "no_source",
+        "standard_topic": rule["topic"],
+        "status": "review_needed" if missing else "pattern_observed_control_flow_unverified",
+        "evidence": evidence, "missing_tokens": missing,
+        "recommendation": rule["recommendation"],
+        "confidence": "bounded_literal_scan",
         "activation": "explicit_project_rule",
     }
-
 
 def validate_rules(rules):
     if not isinstance(rules, list):

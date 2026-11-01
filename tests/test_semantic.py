@@ -32,6 +32,31 @@ class SemanticTests(unittest.TestCase):
             f.write_text("Event += OnEvent;\nEvent -= OnEvent;")
             self.assertEqual(evaluate(root,r)["evidence"][0]["path"],"Scripts/Other.cs")
 
+    def test_evidence_is_collected_across_all_declared_paths(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            first = root/"Assets/Scripts/Root.cs"
+            second = root/"Assets/Scripts/Events.cs"
+            first.parent.mkdir(parents=True)
+            first.write_text("Event += OnEvent;\n")
+            second.write_text("Event -= OnEvent;\n")
+            result = evaluate(root, rule(["Assets/Scripts/Root.cs", "Assets/Scripts/Events.cs"]))
+            self.assertEqual(result["status"], "pattern_observed_control_flow_unverified")
+            self.assertEqual({item["path"] for item in result["evidence"]},
+                             {"Assets/Scripts/Root.cs", "Assets/Scripts/Events.cs"})
+            self.assertEqual(result["missing_tokens"], [])
+
+    def test_later_declared_path_is_not_ignored_after_first_file_exists(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            first = root/"Root.cs"
+            second = root/"Events.cs"
+            first.write_text("unrelated code\n")
+            second.write_text("Event += OnEvent;\nEvent -= OnEvent;\n")
+            result = evaluate(root, rule(["Root.cs", "Events.cs"]))
+            self.assertEqual(result["status"], "pattern_observed_control_flow_unverified")
+            self.assertEqual({item["path"] for item in result["evidence"]}, {"Events.cs"})
+
     def test_invalid_paths_and_duplicate_ids(self):
         with self.assertRaisesRegex(ValueError,"path"):
             validate_rules([rule(["../secret"])])
