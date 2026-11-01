@@ -38,8 +38,8 @@ class SemanticTests(unittest.TestCase):
             first = root/"Assets/Scripts/Root.cs"
             second = root/"Assets/Scripts/Events.cs"
             first.parent.mkdir(parents=True)
-            first.write_text("Event += OnEvent;\\n")
-            second.write_text("Event -= OnEvent;\\n")
+            first.write_text("Event += OnEvent;\n")
+            second.write_text("Event -= OnEvent;\n")
             result = evaluate(root, rule(["Assets/Scripts/Root.cs", "Assets/Scripts/Events.cs"]))
             self.assertEqual(result["status"], "pattern_observed_control_flow_unverified")
             self.assertEqual({item["path"] for item in result["evidence"]},
@@ -51,8 +51,8 @@ class SemanticTests(unittest.TestCase):
             root = Path(d)
             first = root/"Root.cs"
             second = root/"Events.cs"
-            first.write_text("unrelated code\\n")
-            second.write_text("Event += OnEvent;\\nEvent -= OnEvent;\\n")
+            first.write_text("unrelated code\n")
+            second.write_text("Event += OnEvent;\nEvent -= OnEvent;\n")
             result = evaluate(root, rule(["Root.cs", "Events.cs"]))
             self.assertEqual(result["status"], "pattern_observed_control_flow_unverified")
             self.assertEqual({item["path"] for item in result["evidence"]}, {"Events.cs"})
