@@ -91,8 +91,8 @@ class PluginExtensionTests(unittest.TestCase):
         for field in ("id", "topic", "signal", "recommendation"):
             self.assertIsNotNone(re.search(guidance_fields[field]["pattern"], "valid value"))
             self.assertIsNone(re.search(guidance_fields[field]["pattern"], "   "))
-        values = ["../outside", "a/../b", "src/../file.cs", r"a\\b",
-                  "bad\\x00path", "/etc/passwd", "C:/outside", "src/file.cs"]
+        values = ["../outside", "a/../b", "src/../file.cs", r"a\b",
+                  "bad\x00path", "/etc/passwd", "C:/outside", "src/file.cs"]
         for value in values:
             with self.subTest(value=repr(value)):
                 self.assertEqual(pattern.fullmatch(value) is not None,
