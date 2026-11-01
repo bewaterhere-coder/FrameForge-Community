@@ -57,6 +57,24 @@ class SemanticTests(unittest.TestCase):
             self.assertEqual(result["status"], "pattern_observed_control_flow_unverified")
             self.assertEqual({item["path"] for item in result["evidence"]}, {"Events.cs"})
 
+    def test_whitespace_only_tokens_are_rejected(self):
+        for token in ("", " ", "   ", "\\t"):
+            with self.subTest(token=repr(token)):
+                with self.assertRaisesRegex(ValueError, "tokens"):
+                    validate_rules([dict(rule(), tokens=[token])])
+
+    def test_semantic_identity_fields_reject_surrounding_whitespace(self):
+        for field in ("id", "plugin_id", "topic"):
+            with self.subTest(field=field):
+                value = rule()
+                value[field] = " " + value[field]
+                with self.assertRaisesRegex(ValueError, "identity"):
+                    validate_rules([value])
+
+    def test_code_tokens_may_contain_meaningful_spaces(self):
+        value = dict(rule(), tokens=["Event += OnEvent;"])
+        self.assertEqual(validate_rules([value]), [value])
+
     def test_invalid_paths_and_duplicate_ids(self):
         with self.assertRaisesRegex(ValueError,"path"):
             validate_rules([rule(["../secret"])])
