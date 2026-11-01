@@ -302,10 +302,21 @@ def inspect(project, plugin_dir=None, profile_data=None, unity_external_evidence
                 warnings.append({'code': 'STANDARD_UNAVAILABLE', 'message': item['id'] + ': ' + str(ref)})
     advisory = [entry for suggestion in found for entry in advisory_preview(root, catalog[suggestion['plugin_id']])]
     selected_versions = {item['id']: item['version'] for item in selected}
-    semantic = [evaluate(root, rule) for rule in rules
-                if rule['plugin_id'] in catalog
-                and selected_versions.get(rule['plugin_id']) == catalog[rule['plugin_id']]['version']
-                and any(s['plugin_id'] == rule['plugin_id'] for s in found)]
+    semantic = []
+    for rule in rules:
+        plugin_id = rule['plugin_id']
+        if plugin_id not in catalog:
+            warnings.append({'code': 'SEMANTIC_RULE_PLUGIN_UNKNOWN',
+                             'message': rule['id'] + ': unknown plugin ' + plugin_id})
+        elif plugin_id not in selected_versions:
+            warnings.append({'code': 'SEMANTIC_RULE_PLUGIN_NOT_SELECTED',
+                             'message': rule['id'] + ': plugin is not selected: ' + plugin_id})
+        elif selected_versions[plugin_id] != catalog[plugin_id]['version']:
+            warnings.append({'code': 'SEMANTIC_RULE_PLUGIN_VERSION_MISMATCH',
+                             'message': rule['id'] + ': selected plugin version does not match catalog: ' + plugin_id})
+        else:
+            # Explicit Profile selection is authoritative; discovery is not an activation gate.
+            semantic.append(evaluate(root, rule))
     # Project-owned architecture reference is the sole source of authority.
     # Discovery never silently binds standards or activates a plugin.
     chosen = {item['id'] for item in selected if item['id'] in catalog and item['version'] == catalog[item['id']]['version']}
