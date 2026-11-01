@@ -108,22 +108,26 @@
           "id": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 512
+            "maxLength": 512,
+            "pattern": "\\S"
           },
           "topic": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 512
+            "maxLength": 512,
+            "pattern": "\\S"
           },
           "signal": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 512
+            "maxLength": 512,
+            "pattern": "\\S"
           },
           "recommendation": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 512
+            "maxLength": 512,
+            "pattern": "\\S"
           },
           "source_suffix": {
             "enum": [
@@ -192,7 +196,7 @@
     "projectPath": {
       "type": "string",
       "minLength": 1,
-      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\\\.\\\\.(?:/|$))(?!.*\\\\\\\\).+$"
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)(?!.*\\x00).+$"
     }
   }
 }

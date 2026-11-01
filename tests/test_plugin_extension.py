@@ -2,7 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from frameforge.core import manifests, inspect
+from frameforge.core import manifests, inspect, _valid_project_path
 
 
 class PluginExtensionTests(unittest.TestCase):
@@ -67,9 +67,36 @@ class PluginExtensionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Invalid plugin source date'):
             manifests(self.plugins)
 
-    def test_manifest_professional_guidance_accepts_schema_nonempty_whitespace(self):
-        self.add('guidance-space', {'id': 'guidance-space', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'professional_guidance': [{'id': ' ', 'topic': ' ', 'signal': ' ', 'recommendation': ' '}]})
-        self.assertIn('guidance-space', manifests(self.plugins))
+    def test_manifest_professional_guidance_rejects_whitespace_only_fields(self):
+        for field in ("id", "topic", "signal", "recommendation"):
+            with self.subTest(field=field):
+                guidance = {"id": "guidance", "topic": "topic", "signal": "signal",
+                            "recommendation": "recommendation"}
+                guidance[field] = "   "
+                self.add("guidance-space-" + field, {
+                    "id": "guidance-space-" + field, "version": "1.0.0",
+                    "domain": "code", "standards": ["architecture"],
+                    "detection": [["custom.project"]],
+                    "professional_guidance": [guidance],
+                })
+                with self.assertRaisesRegex(ValueError, "Invalid professional guidance"):
+                    manifests(self.plugins)
+
+    def test_schema_project_path_pattern_matches_runtime_path_boundary(self):
+        import re
+        schema_path = Path(__file__).resolve().parents[1] / "docs/plugin-manifest.schema.json"
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        pattern = re.compile(schema["$defs"]["projectPath"]["pattern"])
+        guidance_fields = schema["properties"]["professional_guidance"]["items"]["properties"]
+        for field in ("id", "topic", "signal", "recommendation"):
+            self.assertIsNotNone(re.search(guidance_fields[field]["pattern"], "valid value"))
+            self.assertIsNone(re.search(guidance_fields[field]["pattern"], "   "))
+        values = ["../outside", "a/../b", "src/../file.cs", r"a\b",
+                  "bad\x00path", "/etc/passwd", "C:/outside", "src/file.cs"]
+        for value in values:
+            with self.subTest(value=repr(value)):
+                self.assertEqual(pattern.fullmatch(value) is not None,
+                                 _valid_project_path(value))
 
     def test_bad_manifest_rejected(self):
         self.add('broken', {'id': 'broken', 'version':'1.0.0', 'domain':'code', 'standards':'not-a-list', 'detection':[]})
@@ -114,10 +141,6 @@ class PluginExtensionTests(unittest.TestCase):
         self.add('bad-source', {'id': 'bad-source', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'sources': [{'publisher': 'Example', 'title': 'Guide', 'url': 'https://example.com', 'engine_versions': '1.x', 'accessed': 'not-a-date'}]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin source date'):
             manifests(self.plugins)
-
-    def test_manifest_professional_guidance_accepts_schema_nonempty_whitespace(self):
-        self.add('guidance-space', {'id': 'guidance-space', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'professional_guidance': [{'id': ' ', 'topic': ' ', 'signal': ' ', 'recommendation': ' '}]})
-        self.assertIn('guidance-space', manifests(self.plugins))
 
     def test_bad_manifest_rejected(self):
         self.add('broken', {'id': 'broken', 'version':'1.0.0', 'domain':'code', 'standards':'not-a-list', 'detection':[]})

@@ -15,6 +15,6 @@ Manifest example:
 {"id":"custom-engine","version":"1.0.0","domain":"code","standards":["architecture"],"detection":[["custom.project"]]}
 ```
 
-Discovery suggests a plugin but does not activate it; a project must still explicitly select an ID and version in its Framework Profile. Missing standards produce advisory warnings, not development gates.
+Discovery suggests a plugin but does not activate it. A project must explicitly select an ID and version in its Framework Profile; that selection activates professional guidance independently of discovery markers. Missing standards produce advisory warnings, not development gates.
 
-中文：可以通过 `--plugin-dir` 明确指定外部插件描述文件目录。默认不扫描外部目录，也不执行插件代码。插件 ID 不允许覆盖内置项；发现技术栈只作推荐，启用仍由项目 Profile 决定。规范缺失为 Warning，不阻断开发。
+中文：可以通过 `--plugin-dir` 明确指定外部插件描述文件目录。默认不扫描外部目录，也不执行插件代码。插件 ID 不允许覆盖内置项；发现技术栈只作推荐，专业指导由项目 Profile 显式选择启用，且不依赖自动发现标记。规范缺失为 Warning，不阻断开发。
