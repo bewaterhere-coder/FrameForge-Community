@@ -65,7 +65,7 @@ def _validate_manifest(obj, source):
     guidance = obj.get('professional_guidance', [])
     if not isinstance(guidance, list) or not all(
         isinstance(rule, dict) and all(isinstance(rule.get(k), str)
-        and 0 < len(rule[k]) <= 512 for k in ('id', 'topic', 'signal', 'recommendation'))
+        and 0 < len(rule[k]) <= 512 and bool(rule[k].strip()) for k in ('id', 'topic', 'signal', 'recommendation'))
         and rule.get('source_suffix', '.cs' if obj['id']=='unity' else '.lua') in ('.cs','.lua','.asmdef')
         for rule in guidance
     ):
