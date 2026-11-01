@@ -62,8 +62,6 @@ class PluginExtensionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
             manifests(self.plugins)
 
-    def test_manifest_paths_reject_windows_drive_prefix(self):
-
     def test_manifest_sources_validate_required_fields_and_date(self):
         self.add('bad-source', {'id': 'bad-source', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'sources': [{'publisher': 'Example', 'title': 'Guide', 'url': 'https://example.com', 'engine_versions': '1.x', 'accessed': 'not-a-date'}]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin source date'):
@@ -135,6 +133,4 @@ class PluginExtensionTests(unittest.TestCase):
             self.assertNotIn('custom', [p['plugin_id'] for p in inspect(self.root, self.plugins)['suggested_plugins']])
         finally:
             outside.unlink()
-        self.add('drive-path', {'id': 'drive-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['C:/outside/project']]})
-        with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
-            manifests(self.plugins)
+        self.add('drive-path', {'id': 'drive-path', 'version': '
