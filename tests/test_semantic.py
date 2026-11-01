@@ -32,6 +32,16 @@ class SemanticTests(unittest.TestCase):
             self.assertEqual([item["token"] for item in result["evidence"]], ["Event += OnEvent;"])
             self.assertEqual(result["missing_tokens"], ["Event -= OnEvent;"])
 
+    def test_csharp_raw_string_quotes_and_comment_markers_do_not_hide_following_code(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            f = root/"RawString.cs"
+            f.write_text('var template = """text " quote // still string"""; Event += OnEvent; // Event -= OnEvent;\n')
+            result = evaluate(root, rule(["RawString.cs"]))
+            self.assertEqual(result["status"], "review_needed")
+            self.assertEqual([item["token"] for item in result["evidence"]], ["Event += OnEvent;"])
+            self.assertEqual(result["missing_tokens"], ["Event -= OnEvent;"])
+
     def test_lua_comment_markers_inside_strings_do_not_hide_code(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
