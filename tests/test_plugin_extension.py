@@ -133,4 +133,3 @@ class PluginExtensionTests(unittest.TestCase):
             self.assertNotIn('custom', [p['plugin_id'] for p in inspect(self.root, self.plugins)['suggested_plugins']])
         finally:
             outside.unlink()
-        self.add('drive-path', {'id': 'drive-path', 'version': '
