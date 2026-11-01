@@ -22,6 +22,31 @@ class SemanticTests(unittest.TestCase):
             f.write_text("Event += OnEvent;\nEvent -= OnEvent;")
             self.assertEqual(evaluate(root,rule())["status"],"pattern_observed_control_flow_unverified")
 
+    def test_csharp_comment_markers_inside_strings_do_not_hide_code(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            f = root/"Root.cs"
+            f.write_text('var url = "https://example.com"; Event += OnEvent; // Event -= OnEvent;\n')
+            result = evaluate(root, rule(["Root.cs"]))
+            self.assertEqual(result["status"], "review_needed")
+            self.assertEqual([item["token"] for item in result["evidence"]], ["Event += OnEvent;"])
+            self.assertEqual(result["missing_tokens"], ["Event -= OnEvent;"])
+
+    def test_lua_comment_markers_inside_strings_do_not_hide_code(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            f = root/"transaction.lua"
+            f.write_text('local marker = "-- not a comment"; query(db, "COMMIT") -- query(db, "ROLLBACK")\n')
+            value = {
+                "plugin_id": "skynet", "id": "transaction", "topic": "transaction",
+                "recommendation": "review recovery", "language": "lua",
+                "paths": ["transaction.lua"], "tokens": ['"COMMIT"', '"ROLLBACK"'],
+            }
+            result = evaluate(root, value)
+            self.assertEqual(result["status"], "review_needed")
+            self.assertEqual([item["token"] for item in result["evidence"]], ['"COMMIT"'])
+            self.assertEqual(result["missing_tokens"], ['"ROLLBACK"'])
+
     def test_relocation_and_absence(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d)
