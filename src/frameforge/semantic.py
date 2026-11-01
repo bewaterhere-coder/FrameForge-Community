@@ -19,7 +19,7 @@ def evaluate(root, rule):
         language = rule["language"]
         if language == "csharp":
             pattern = re.compile(
-                r'(?P<string>@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\')'
+                r'(?P<string>(?P<raw_delimiter>"{3,})[\s\S]*?(?P=raw_delimiter)|@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\')'
                 r'|(?P<comment>//[^\n]*|/\*[\s\S]*?\*/)'
             )
         else:
