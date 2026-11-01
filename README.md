@@ -82,7 +82,7 @@ CLI 保持 `frameforge /path/to/project`；如需 AI 客户端直接调用，可
 
 ## English
 
-FrameForge is a standalone, read-only project framework discovery and standards advisory tool. Projects own their canonical standards. Discovery may return path-level advisory previews but never activates professional checks, and findings never create a development gate. See the [Core responsibility and plugin boundary](docs/core-responsibility-and-plugin-boundary-v1.md).
+FrameForge is a standalone, read-only project framework discovery and standards advisory tool. Projects own their canonical standards. Discovery suggests plugins but does not activate them; explicit Profile selection activates professional guidance independently of discovery markers. Findings never create a development gate. See the [Core responsibility and plugin boundary](docs/core-responsibility-and-plugin-boundary-v1.md).
 
 ### Quick start
 
