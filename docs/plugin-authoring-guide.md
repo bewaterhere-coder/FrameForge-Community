@@ -2,7 +2,7 @@
 
 ## 中文
 
-本指南面向希望为 FrameForge 增加游戏引擎或专业领域支持的社区贡献者。**优先提交声明式 Manifest，不要先写代码。** 当前外部插件是只读元数据：FrameForge 不导入、不执行插件脚本，也不会因发现引擎而自动启用插件。
+本指南面向希望为 FrameForge 增加游戏引擎或专业领域支持的社区贡献者。**优先提交声明式 Manifest，不要先写代码。** 当前外部插件是只读元数据：FrameForge 不导入、不执行插件脚本。发现只负责推荐；专业指导由项目 Profile 显式选择启用，且不依赖自动发现标记。
 
 ### 1. 先确定贡献类型
 
@@ -77,7 +77,7 @@ PR 应包含：插件 ID/版本、引擎版本范围、官方/社区来源、Man
 
 ## English
 
-This guide is for contributors adding game-engine or specialist guidance. **Start with a declarative manifest, not code.** External plugins are read-only metadata: FrameForge does not import or execute plugin scripts, and engine discovery never activates a plugin.
+This guide is for contributors adding game-engine or specialist guidance. **Start with a declarative manifest, not code.** External plugins are read-only metadata: FrameForge does not import or execute plugin scripts. Discovery only suggests plugins; professional guidance runs only after explicit Profile selection, independently of discovery markers.
 
 ### 1. Choose the contribution type
 
