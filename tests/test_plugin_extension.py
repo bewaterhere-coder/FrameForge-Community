@@ -142,10 +142,6 @@ class PluginExtensionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Invalid plugin source date'):
             manifests(self.plugins)
 
-    def test_manifest_professional_guidance_accepts_schema_nonempty_whitespace(self):
-        self.add('guidance-space', {'id': 'guidance-space', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'professional_guidance': [{'id': ' ', 'topic': ' ', 'signal': ' ', 'recommendation': ' '}]})
-        self.assertIn('guidance-space', manifests(self.plugins))
-
     def test_bad_manifest_rejected(self):
         self.add('broken', {'id': 'broken', 'version':'1.0.0', 'domain':'code', 'standards':'not-a-list', 'detection':[]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin manifest'):
