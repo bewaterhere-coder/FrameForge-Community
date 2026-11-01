@@ -68,6 +68,6 @@ def validate_rules(rules):
                 isinstance(v, str) and 0 < len(v) <= 256 for v in values
             ):
                 raise ValueError("invalid semantic rule " + field)
-        if any(Path(v).is_absolute() or ".." in Path(v.replace("\\", "/")).parts or "\x00" in v or "\\" in v for v in rule["paths"]):
+        if any(Path(v).is_absolute() or re.match(r"^[A-Za-z]:", v) or ".." in Path(v.replace("\\", "/")).parts or "\x00" in v or "\\" in v for v in rule["paths"]):
             raise ValueError("invalid semantic rule path")
     return rules

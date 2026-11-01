@@ -20,7 +20,7 @@ frameforge /path/to/your/game-project
 
 ### 2. 建立项目自己的规范
 
-由项目负责人确定规范的正式位置和版本。可以将规范保存在项目仓库，也可以在项目授权范围内引用其他位置。FrameForge 不要求团队采用某一种架构，也不替项目决定 MVP、MVVM、ECS、分层或资源目录方案。 Profile 中的规范引用和结构路径使用项目根目录下的 POSIX 风格相对路径（`/` 分隔）；不要使用盘符、反斜杠或路径穿越。
+由项目负责人确定规范的正式位置和版本。可以将规范保存在项目仓库，也可以在项目授权范围内引用其他位置。FrameForge 不要求团队采用某一种架构，也不替项目决定 MVP、MVVM、ECS、分层或资源目录方案。 Profile 中的规范引用和结构路径使用项目根目录下的 POSIX 风格相对路径（`/` 分隔）；不要使用盘符、反斜杠或路径穿越。 `semantic_rules[].paths` 遵循相同规则。
 
 建议至少明确：
 - 代码架构与模块边界；
@@ -107,7 +107,7 @@ The first inspection discovers technology markers, candidate plugins and possibl
 
 ### 2. Define project-owned standards
 
-Project owners decide where canonical standards live and how they are versioned. FrameForge does not require a particular architecture or prescribe a single UI, asset or code organization model. Profile standard references and structural paths use POSIX-style project-relative paths (`/` separators); drive prefixes, backslashes and traversal paths are rejected.
+Project owners decide where canonical standards live and how they are versioned. FrameForge does not require a particular architecture or prescribe a single UI, asset or code organization model. Profile standard references and structural paths use POSIX-style project-relative paths (`/` separators); drive prefixes, backslashes and traversal paths are rejected. The same rule applies to `semantic_rules[].paths`.
 
 Useful topics include architecture and module boundaries, UI/art conventions, asset import and reference rules, test scope and evidence, and standards ownership/versioning.
 

@@ -49,6 +49,10 @@ class SemanticTests(unittest.TestCase):
                "recommendation":"test recovery"}
             self.assertEqual(evaluate(root,r)["status"],"pattern_observed_control_flow_unverified")
 
+    def test_windows_drive_path_rejected_on_posix_hosts(self):
+        with self.assertRaisesRegex(ValueError, "path"):
+            validate_rules([rule(["C:/outside.cs"])])
+
     def test_windows_escape_and_rule_limit_rejected(self):
         with self.assertRaisesRegex(ValueError,"path"):
             validate_rules([rule(["..\\secret"])])
