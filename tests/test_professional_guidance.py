@@ -37,6 +37,24 @@ class GuidanceTests(unittest.TestCase):
             self.assertEqual(len(result),2)
             self.assertEqual(result[0]['evidence'][0]['path'],'backend/custom_actor.lua')
 
+    def test_explicit_selection_runs_guidance_without_discovery_marker(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            source=root/'Assets/Engine/Controller.cs'
+            source.parent.mkdir(parents=True)
+            source.write_text('public class Controller : MonoBehaviour {}')
+            (root/'.frameforge').mkdir()
+            (root/'.frameforge/profile.json').write_text(json.dumps(
+                {'schema_version':1,'selected_plugins':[{'id':'unity','version':'1.0.0'}]}))
+            result=inspect(root)
+            self.assertEqual(result['suggested_plugins'], [])
+            self.assertEqual(len(result['professional_guidance']), 2)
+            self.assertEqual(result['professional_guidance'][0]['status'],'review_recommended')
+            self.assertEqual(result['professional_guidance'][0]['evidence'][0]['path'],
+                             'Assets/Engine/Controller.cs')
+            self.assertEqual(result['professional_guidance'][1]['status'],'not_evaluated')
+            self.assertFalse(result['blocking'])
+
     def test_unmatched_signal_is_not_a_gap(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d)
