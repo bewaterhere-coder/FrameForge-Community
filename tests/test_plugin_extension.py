@@ -52,13 +52,13 @@ class PluginExtensionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
             manifests(self.plugins)
 
-    def test_manifest_paths_reject_nul_character(self):
-        self.add('nul-path', {'id': 'nul-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['bad\x00path']]})
+    def test_manifest_paths_reject_windows_drive_prefix(self):
+        self.add('drive-path', {'id': 'drive-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['C:/outside/project']]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
             manifests(self.plugins)
 
-    def test_manifest_paths_reject_windows_drive_prefix(self):
-        self.add('drive-path', {'id': 'drive-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['C:/outside/project']]})
+    def test_manifest_paths_reject_nul_character(self):
+        self.add('nul-path', {'id': 'nul-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['bad\x00path']]})
         with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
             manifests(self.plugins)
 
@@ -97,50 +97,6 @@ class PluginExtensionTests(unittest.TestCase):
             with self.subTest(value=repr(value)):
                 self.assertEqual(pattern.fullmatch(value) is not None,
                                  _valid_project_path(value))
-
-    def test_bad_manifest_rejected(self):
-        self.add('broken', {'id': 'broken', 'version':'1.0.0', 'domain':'code', 'standards':'not-a-list', 'detection':[]})
-        with self.assertRaisesRegex(ValueError, 'Invalid plugin manifest'):
-            manifests(self.plugins)
-
-    def test_nonexistent_extension_dir_rejected(self):
-        with self.assertRaisesRegex(ValueError, 'Plugin directory missing'):
-            manifests(self.root / 'missing')
-
-    def test_project_not_mutated(self):
-        self.add()
-        prior = sorted(p.relative_to(self.root).as_posix() for p in self.root.rglob('*') if p.is_file())
-        inspect(self.root, self.plugins)
-        after = sorted(p.relative_to(self.root).as_posix() for p in self.root.rglob('*') if p.is_file())
-        self.assertEqual(prior, after)
-
-    def test_escape_marker_rejected(self):
-        self.add('escape', {'id':'escape','version':'1.0.0','domain':'code','standards':['architecture'],'detection':[['../outside']]})
-        with self.assertRaisesRegex(ValueError, 'Invalid plugin'):
-            manifests(self.plugins)
-
-    def test_absolute_marker_rejected(self):
-        self.add('absolute', {'id':'absolute','version':'1.0.0','domain':'code','standards':['architecture'],'detection':[['/etc/passwd']]})
-        with self.assertRaisesRegex(ValueError, 'Invalid plugin'):
-            manifests(self.plugins)
-
-    def test_symlink_outside_project_not_detected(self):
-        outside = self.root.parent / ('frameforge-outside-' + self.root.name)
-        outside.write_text('x')
-        try:
-            (self.root/'custom.project').symlink_to(outside)
-            self.add()
-            self.assertNotIn('custom', [p['plugin_id'] for p in inspect(self.root, self.plugins)['suggested_plugins']])
-        finally:
-            outside.unlink()
-        self.add('drive-path', {'id': 'drive-path', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['C:/outside/project']]})
-        with self.assertRaisesRegex(ValueError, 'Invalid plugin detection'):
-            manifests(self.plugins)
-
-    def test_manifest_sources_validate_required_fields_and_date(self):
-        self.add('bad-source', {'id': 'bad-source', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'sources': [{'publisher': 'Example', 'title': 'Guide', 'url': 'https://example.com', 'engine_versions': '1.x', 'accessed': 'not-a-date'}]})
-        with self.assertRaisesRegex(ValueError, 'Invalid plugin source date'):
-            manifests(self.plugins)
 
     def test_bad_manifest_rejected(self):
         self.add('broken', {'id': 'broken', 'version':'1.0.0', 'domain':'code', 'standards':'not-a-list', 'detection':[]})
