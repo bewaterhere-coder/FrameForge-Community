@@ -64,7 +64,7 @@ def validate_rules(rules):
         if not isinstance(rule, dict) or not all(
             isinstance(rule.get(k), str) and bool(rule[k].strip())
             for k in ("id", "plugin_id", "topic", "recommendation")
-        ):
+        ) or any(rule[k] != rule[k].strip() for k in ("id", "plugin_id", "topic")):
             raise ValueError("invalid semantic rule identity")
         if rule["id"] in ids:
             raise ValueError("duplicate semantic rule id")
@@ -74,7 +74,9 @@ def validate_rules(rules):
         for field in ("paths", "tokens"):
             values = rule.get(field)
             if not isinstance(values, list) or not values or len(values) > 20 or not all(
-                isinstance(v, str) and 0 < len(v) <= 256 for v in values
+                isinstance(v, str) and 0 < len(v) <= 256
+                and (field != "tokens" or bool(v.strip()))
+                for v in values
             ):
                 raise ValueError("invalid semantic rule " + field)
         if any(Path(v).is_absolute() or re.match(r"^[A-Za-z]:", v) or ".." in Path(v.replace("\\", "/")).parts or "\x00" in v or "\\" in v for v in rule["paths"]):
