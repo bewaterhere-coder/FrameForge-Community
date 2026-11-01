@@ -33,19 +33,7 @@ frameforge /path/to/your/game-project
 
 在项目根目录创建 `.frameforge/profile.json`，只选择当前项目需要的插件，并绑定项目正式规范路径。不要为了消除 Warning 而创建空白规范或启用无关插件。
 
-```json
-{
-  "schema_version": 1,
-  "plugins": [
-    {"id": "unity", "version": "1.0.0"}
-  ],
-  "standards": [
-    {"domain": "architecture", "path": "docs/architecture.md", "version": "1.0"}
-  ]
-}
-```
-
-以上仅为格式示例；插件 ID、版本和规范路径必须以实际项目为准。
+请直接复制并按项目实际情况修改[标准 Profile 示例](profile-example.json)。该示例与当前 Core 的 `schema_version: 1` 契约一致：使用 `selected_plugins` 显式选择插件，使用 `standards` 对象映射领域到项目相对路径。不要使用旧版 `plugins` 数组或 `standards` 对象数组。
 
 若配置 `semantic_rules`，每条规则的 `plugin_id` 必须对应仓库中可用的插件，并且该插件必须在当前 Profile 中显式选择，版本也必须与插件清单一致。未知插件、未选择插件或版本不匹配会产生非阻塞 Warning；插件未被自动发现时，显式选择的规则仍会保留为 `not_evaluated`，不会静默消失。 `check_clauses` 的键是检查 ID：要绑定 Semantic Rule 时必须与其 `id` 完全一致；也允许独立条款覆盖记录，此时没有对应规则的条款保持 `not_evaluated`。检查 ID 和条款 ID 不得为空或带首尾空白。
 
