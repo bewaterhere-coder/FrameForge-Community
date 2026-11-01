@@ -27,6 +27,9 @@ python -m pip install .
 
 ```sh
 frameforge --plugins
+# 先检查仓库自带的完整示例，无需创建 Profile
+frameforge examples/sample-game-godot
+# 再检查你自己的游戏项目
 frameforge /path/to/your/game-project
 ```
 
@@ -101,6 +104,9 @@ List available plugins, then inspect your own Unity or other game project:
 
 ```sh
 frameforge --plugins
+# Inspect the included sample first; no Profile setup is needed
+frameforge examples/sample-game-godot
+# Then inspect your own game project
 frameforge /path/to/your/game-project
 ```
 
