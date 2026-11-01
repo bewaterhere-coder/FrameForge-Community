@@ -3,6 +3,28 @@ import re
 from pathlib import Path
 
 
+def mask_comments(source, language):
+    """Mask real C# or Lua comments while preserving quoted string contents and line numbers."""
+    if language == "csharp":
+        pattern = re.compile(
+            r'(?P<string>(?P<raw_delimiter>"{3,})[\s\S]*?(?P=raw_delimiter)|@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\')'
+            r'|(?P<comment>//[^\n]*|/\*[\s\S]*?\*/)'
+        )
+    elif language == "lua":
+        pattern = re.compile(
+            r'(?P<long_string>\[(?P<eq>=*)\[[\s\S]*?\](?P=eq)\])'
+            r'|(?P<string>"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\')'
+            r'|(?P<comment>--\[(?P<comment_eq>=*)\[[\s\S]*?\](?P=comment_eq)\]|--[^\n]*)'
+        )
+    else:
+        raise ValueError("unsupported comment masking language")
+    return pattern.sub(
+        lambda match: re.sub(r'[^\n]', ' ', match.group())
+        if match.group("comment") else match.group(),
+        source,
+    )
+
+
 def evaluate(root, rule):
     """Observe declared literals across bounded source paths; never claim control-flow compliance."""
     root = Path(root).resolve()
@@ -16,23 +38,7 @@ def evaluate(root, rule):
         except (UnicodeError, OSError):
             continue
         # Comment filtering is intentionally conservative; not a language parser.
-        language = rule["language"]
-        if language == "csharp":
-            pattern = re.compile(
-                r'(?P<string>(?P<raw_delimiter>"{3,})[\s\S]*?(?P=raw_delimiter)|@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\')'
-                r'|(?P<comment>//[^\n]*|/\*[\s\S]*?\*/)'
-            )
-        else:
-            pattern = re.compile(
-                r'(?P<long_string>\[(?P<eq>=*)\[[\s\S]*?\](?P=eq)\])'
-                r'|(?P<string>"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\')'
-                r'|(?P<comment>--\[(?P<comment_eq>=*)\[[\s\S]*?\](?P=comment_eq)\]|--[^\n]*)'
-            )
-        source = pattern.sub(
-            lambda match: re.sub(r'[^\n]', ' ', match.group())
-            if match.group("comment") else match.group(),
-            source,
-        )
+        source = mask_comments(source, rule["language"])
         sources.append((relative, source))
 
     if not sources:

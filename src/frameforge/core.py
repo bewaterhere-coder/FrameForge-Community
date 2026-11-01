@@ -6,7 +6,7 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import urlsplit
 from importlib.resources import files
-from .semantic import evaluate, validate_rules
+from .semantic import evaluate, mask_comments, validate_rules
 from .plugin_checks import run as run_plugin_checks, validate_profile_checks
 from .remediation import advise as advise_warnings
 from .custom_standards import summarize as summarize_custom_standards
@@ -125,9 +125,11 @@ def professional_preview(root, manifest):
                 content = safe.read_text(encoding='utf-8')
             except (OSError, UnicodeError):
                 continue
-            pattern = (r'//[^\n]*|/\*[\s\S]*?\*/' if path.suffix in ('.cs','.asmdef')
-                       else r'--\[\[[\s\S]*?\]\]|--[^\n]*')
-            content = re.sub(pattern, lambda m: re.sub(r'[^\n]', ' ', m.group()), content)
+            if path.suffix == '.cs':
+                content = mask_comments(content, 'csharp')
+            elif path.suffix == '.lua':
+                content = mask_comments(content, 'lua')
+            # .asmdef is JSON: do not apply C# comment rules to JSON string values.
             evidence.append((rel, content))
             if len(evidence) >= 150:
                 break

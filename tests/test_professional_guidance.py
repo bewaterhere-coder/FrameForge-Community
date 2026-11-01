@@ -48,6 +48,35 @@ class GuidanceTests(unittest.TestCase):
             r=inspect(root)['professional_guidance']
             self.assertTrue(all(item['status']=='not_evaluated' for item in r))
 
+    def test_csharp_url_string_does_not_hide_professional_guidance_signal(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            (root/'ProjectSettings').mkdir()
+            (root/'ProjectSettings/ProjectVersion.txt').write_text('Unity')
+            source=root/'Assets/Controller.cs'
+            source.parent.mkdir()
+            source.write_text('var url = "https://example.com"; MonoBehaviour; // MonoBehaviour\n')
+            (root/'.frameforge').mkdir()
+            (root/'.frameforge/profile.json').write_text(json.dumps(
+                {'schema_version':1,'selected_plugins':[{'id':'unity','version':'1.0.0'}]}))
+            result=inspect(root)['professional_guidance']
+            self.assertEqual(result[0]['status'],'review_recommended')
+            self.assertEqual(result[0]['evidence'][0]['path'],'Assets/Controller.cs')
+
+    def test_lua_comment_marker_in_string_does_not_hide_skynet_guidance_signal(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            (root/'Dockerfile').write_text('FROM cloudwu/skynet')
+            source=root/'backend/actor.lua'
+            source.parent.mkdir()
+            source.write_text('local marker = "-- text"; skynet.start(function() end) -- skynet.start(false)\n')
+            (root/'.frameforge').mkdir()
+            (root/'.frameforge/profile.json').write_text(json.dumps(
+                {'schema_version':1,'selected_plugins':[{'id':'skynet','version':'1.0.0'}]}))
+            result=inspect(root)['professional_guidance']
+            self.assertEqual(result[0]['status'],'review_recommended')
+            self.assertEqual(result[0]['evidence'][0]['path'],'backend/actor.lua')
+
     def test_comments_not_treated_as_signals(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d)
