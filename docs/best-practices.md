@@ -11,6 +11,9 @@ git clone https://github.com/bewaterhere-coder/FrameForge-Community.git
 cd FrameForge-Community
 python -m pip install .
 frameforge --plugins
+# 先检查仓库自带的 Godot 示例，观察真实 Profile 和规范绑定
+frameforge examples/sample-game-godot
+# 再检查自己的项目
 frameforge /path/to/your/game-project
 ```
 
@@ -88,6 +91,9 @@ git clone https://github.com/bewaterhere-coder/FrameForge-Community.git
 cd FrameForge-Community
 python -m pip install .
 frameforge --plugins
+# Inspect the included Godot sample and its real Profile/standards bindings
+frameforge examples/sample-game-godot
+# Then inspect your own project
 frameforge /path/to/your/game-project
 ```
 
