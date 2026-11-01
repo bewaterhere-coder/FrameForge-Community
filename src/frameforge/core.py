@@ -270,8 +270,9 @@ def inspect(project, plugin_dir=None, profile_data=None, unity_external_evidence
                 raise ValueError('invalid structural_paths')
             clauses = profile.get('check_clauses', {})
             if not isinstance(clauses, dict) or not all(
-                isinstance(k, str) and isinstance(v, dict)
-                and isinstance(v.get('id'), str) and bool(v['id'].strip())
+                isinstance(k, str) and bool(k.strip()) and k == k.strip()
+                and isinstance(v, dict)
+                and isinstance(v.get('id'), str) and bool(v['id'].strip()) and v['id'] == v['id'].strip()
                 and isinstance(v.get('text'), str) and bool(v['text'].strip())
                 and isinstance(v.get('reference'), str) and bool(v['reference'].strip())
                 for k, v in clauses.items()

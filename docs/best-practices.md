@@ -47,7 +47,7 @@ frameforge /path/to/your/game-project
 
 以上仅为格式示例；插件 ID、版本和规范路径必须以实际项目为准。
 
-若配置 `semantic_rules`，每条规则的 `plugin_id` 必须对应仓库中可用的插件，并且该插件必须在当前 Profile 中显式选择，版本也必须与插件清单一致。未知插件、未选择插件或版本不匹配会产生非阻塞 Warning；插件未被自动发现时，显式选择的规则仍会保留为 `not_evaluated`，不会静默消失。
+若配置 `semantic_rules`，每条规则的 `plugin_id` 必须对应仓库中可用的插件，并且该插件必须在当前 Profile 中显式选择，版本也必须与插件清单一致。未知插件、未选择插件或版本不匹配会产生非阻塞 Warning；插件未被自动发现时，显式选择的规则仍会保留为 `not_evaluated`，不会静默消失。 `check_clauses` 的键是检查 ID：要绑定 Semantic Rule 时必须与其 `id` 完全一致；也允许独立条款覆盖记录，此时没有对应规则的条款保持 `not_evaluated`。检查 ID 和条款 ID 不得为空或带首尾空白。
 
 ### 4. 多仓库项目
 
@@ -117,7 +117,7 @@ Useful topics include architecture and module boundaries, UI/art conventions, as
 
 Create `.frameforge/profile.json` at the project root. Select only the plugins needed by that project and bind canonical standards paths. Do not create empty standards or enable unrelated plugins merely to silence warnings. See the [Profile example](profile-example.json) and [plugin authoring guide](plugin-authoring-guide.md).
 
-If you configure `semantic_rules`, each rule's `plugin_id` must identify an available plugin explicitly selected in the current Profile, with a version matching its manifest. Unknown, unselected or version-mismatched plugins produce non-blocking warnings. If an explicitly selected plugin is not discovered automatically, its rule remains visible as `not_evaluated` instead of silently disappearing.
+If you configure `semantic_rules`, each rule's `plugin_id` must identify an available plugin explicitly selected in the current Profile, with a version matching its manifest. Unknown, unselected or version-mismatched plugins produce non-blocking warnings. If an explicitly selected plugin is not discovered automatically, its rule remains visible as `not_evaluated` instead of silently disappearing. A `check_clauses` key is a check ID: to bind a Semantic Rule, it must exactly match that rule's `id`. Standalone clause-coverage entries are also allowed; without a matching rule, they remain `not_evaluated`. Check IDs and clause IDs must be non-empty and have no surrounding whitespace.
 
 ### 4. Multi-repository projects
 
