@@ -128,6 +128,25 @@ class FrameworkTests(unittest.TestCase):
         self.assertEqual(result['semantic_checks'], [])
         self.assertFalse(result['blocking'])
 
+    def test_check_clause_rejects_blank_or_padded_check_ids_nonblocking(self):
+        for check_id in ('', '   ', ' lifecycle '):
+            with self.subTest(check_id=check_id):
+                profile = self.root/'.frameforge/profile.json'
+                profile.parent.mkdir(exist_ok=True)
+                profile.write_text(json.dumps({
+                    'schema_version': 1,
+                    'selected_plugins': [],
+                    'standards': {},
+                    'check_clauses': {
+                        check_id: {'id': 'ARCH-1', 'text': 'Must unsubscribe',
+                                   'reference': 'docs/architecture.md'}
+                    },
+                }))
+                result = inspect(self.root)
+                self.assertIn('PROFILE_INVALID', [w['code'] for w in result['warnings']])
+                self.assertEqual(result['clause_coverage'], [])
+                self.assertFalse(result['blocking'])
+
     def test_profile_invalid_nonblocking(self):
         p=self.root/'.frameforge/profile.json';p.parent.mkdir();p.write_text('{bad')
         r=inspect(self.root);self.assertFalse(r['blocking']);self.assertEqual(r['warnings'][0]['code'],'PROFILE_INVALID')
