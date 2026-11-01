@@ -30,7 +30,7 @@ frameforge --plugins
 frameforge /path/to/your/game-project
 ```
 
-首次检查只会发现技术栈和报告规范缺口，不会修改项目或自动启用插件。要启用专业检查，在**项目自身**建立 `.frameforge/profile.json`，明确填写插件 ID、版本和项目正式规范路径，格式参见 [Profile 示例](docs/profile-example.json)。检查命令仍为 `frameforge /path/to/your/game-project`。
+首次检查只会发现技术栈和报告规范缺口，不会修改项目或自动启用插件。要启用专业检查，在**项目自身**建立 `.frameforge/profile.json`，明确填写插件 ID、版本和项目正式规范路径，格式参见 [Profile 示例](docs/profile-example.json)。检查命令仍为 `frameforge /path/to/your/game-project`。 Profile 中的显式选择独立于自动发现；即使发现标记缺失，也会执行已选择插件的专业指导，并在没有证据时报告 `not_evaluated`。
 
 ### 贡献者开发环境
 
@@ -104,7 +104,7 @@ frameforge --plugins
 frameforge /path/to/your/game-project
 ```
 
-Inspection is read-only and does not activate plugins. For opt-in checks, create a project-owned `.frameforge/profile.json` with explicit plugin IDs/versions and canonical standard references; see the [profile example](docs/profile-example.json). Ordinary users do not need development dependencies or the test suite.
+Inspection is read-only and does not activate plugins. For opt-in checks, create a project-owned `.frameforge/profile.json` with explicit plugin IDs/versions and canonical standard references; see the [profile example](docs/profile-example.json). Ordinary users do not need development dependencies or the test suite. Explicit Profile selection is independent of automatic discovery markers: selected plugin guidance still runs when a marker is absent, and reports `not_evaluated` when no source evidence is available.
 
 ### Contributor setup and tests
 
