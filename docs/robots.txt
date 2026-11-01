@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bewaterhere-coder.github.io/FrameForge-Community/sitemap.xml
