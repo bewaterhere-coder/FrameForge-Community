@@ -253,6 +253,8 @@ def inspect(project, plugin_dir=None, profile_data=None, unity_external_evidence
             standards = profile.get('standards', {})
             if not all(isinstance(i, dict) and isinstance(i.get('id'), str) and i['id'] and isinstance(i.get('version'), str) and i['version'] for i in selected):
                 raise ValueError('selected_plugins entries must have id and version')
+            if len({item['id'] for item in selected}) != len(selected):
+                raise ValueError('selected_plugins must not contain duplicate plugin IDs')
             if not all(isinstance(k, str) and isinstance(v, str) for k, v in standards.items()):
                 raise ValueError('standards must be string references')
             rules = validate_rules(profile.get('semantic_rules', []))
