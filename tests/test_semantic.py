@@ -58,7 +58,7 @@ class SemanticTests(unittest.TestCase):
             self.assertEqual({item["path"] for item in result["evidence"]}, {"Events.cs"})
 
     def test_whitespace_only_tokens_are_rejected(self):
-        for token in ("", " ", "   ", "\\t"):
+        for token in ("", " ", "   ", "\t"):
             with self.subTest(token=repr(token)):
                 with self.assertRaisesRegex(ValueError, "tokens"):
                     validate_rules([dict(rule(), tokens=[token])])
