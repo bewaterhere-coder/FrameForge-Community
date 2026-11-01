@@ -55,7 +55,7 @@ class GuidanceTests(unittest.TestCase):
             (root/'ProjectSettings/ProjectVersion.txt').write_text('Unity')
             source=root/'Assets/Controller.cs'
             source.parent.mkdir()
-            source.write_text('var url = "https://example.com"; MonoBehaviour; // MonoBehaviour\\n')
+            source.write_text('var url = "https://example.com"; MonoBehaviour; // MonoBehaviour\n')
             (root/'.frameforge').mkdir()
             (root/'.frameforge/profile.json').write_text(json.dumps(
                 {'schema_version':1,'selected_plugins':[{'id':'unity','version':'1.0.0'}]}))
@@ -69,7 +69,7 @@ class GuidanceTests(unittest.TestCase):
             (root/'Dockerfile').write_text('FROM cloudwu/skynet')
             source=root/'backend/actor.lua'
             source.parent.mkdir()
-            source.write_text('local marker = "-- text"; skynet.start(function() end) -- skynet.start(false)\\n')
+            source.write_text('local marker = "-- text"; skynet.start(function() end) -- skynet.start(false)\n')
             (root/'.frameforge').mkdir()
             (root/'.frameforge/profile.json').write_text(json.dumps(
                 {'schema_version':1,'selected_plugins':[{'id':'skynet','version':'1.0.0'}]}))
