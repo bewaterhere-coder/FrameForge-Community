@@ -87,15 +87,16 @@ class PluginExtensionTests(unittest.TestCase):
         schema_path = Path(__file__).resolve().parents[1] / "docs/plugin-manifest.schema.json"
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
         pattern = re.compile(schema["$defs"]["projectPath"]["pattern"])
+        guidance_fields = schema["properties"]["professional_guidance"]["items"]["properties"]
+        for field in ("id", "topic", "signal", "recommendation"):
+            self.assertIsNotNone(re.search(guidance_fields[field]["pattern"], "valid value"))
+            self.assertIsNone(re.search(guidance_fields[field]["pattern"], "   "))
         values = ["../outside", "a/../b", "src/../file.cs", r"a\\b",
                   "bad\\x00path", "/etc/passwd", "C:/outside", "src/file.cs"]
         for value in values:
             with self.subTest(value=repr(value)):
                 self.assertEqual(pattern.fullmatch(value) is not None,
                                  _valid_project_path(value))
-
-        self.add('guidance-space', {'id': 'guidance-space', 'version': '1.0.0', 'domain': 'code', 'standards': ['architecture'], 'detection': [['custom.project']], 'professional_guidance': [{'id': ' ', 'topic': ' ', 'signal': ' ', 'recommendation': ' '}]})
-        self.assertIn('guidance-space', manifests(self.plugins))
 
     def test_bad_manifest_rejected(self):
         self.add('broken', {'id': 'broken', 'version':'1.0.0', 'domain':'code', 'standards':'not-a-list', 'detection':[]})
