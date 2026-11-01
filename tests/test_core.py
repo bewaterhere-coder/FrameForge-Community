@@ -76,6 +76,58 @@ class FrameworkTests(unittest.TestCase):
         self.assertFalse(result['blocking'])
         self.assertEqual(result['selected_plugins'], [])
 
+    def write_semantic_profile(self, selected, rules):
+        profile = self.root/'.frameforge/profile.json'
+        profile.parent.mkdir(exist_ok=True)
+        profile.write_text(json.dumps({
+            'schema_version': 1,
+            'selected_plugins': selected,
+            'standards': {},
+            'semantic_rules': rules,
+        }))
+
+    def semantic_rule(self, plugin_id='unity', rule_id='rule-1', paths=None):
+        return {
+            'id': rule_id, 'plugin_id': plugin_id, 'topic': 'architecture',
+            'recommendation': 'review evidence', 'language': 'csharp',
+            'paths': paths or ['Assets/Root.cs'], 'tokens': ['Root.Update()'],
+        }
+
+    def test_semantic_rule_unknown_plugin_is_reported_nonblocking(self):
+        self.write_semantic_profile([], [self.semantic_rule(plugin_id='missing-engine')])
+        result = inspect(self.root)
+        self.assertIn('SEMANTIC_RULE_PLUGIN_UNKNOWN', [w['code'] for w in result['warnings']])
+        self.assertEqual(result['semantic_checks'], [])
+        self.assertFalse(result['blocking'])
+
+    def test_semantic_rule_requires_explicit_plugin_selection(self):
+        self.write_semantic_profile([], [self.semantic_rule()])
+        result = inspect(self.root)
+        self.assertIn('SEMANTIC_RULE_PLUGIN_NOT_SELECTED', [w['code'] for w in result['warnings']])
+        self.assertEqual(result['semantic_checks'], [])
+        self.assertFalse(result['blocking'])
+
+    def test_selected_semantic_rule_is_not_silently_dropped_when_plugin_not_discovered(self):
+        self.write_semantic_profile(
+            [{'id': 'unity', 'version': '1.0.0'}],
+            [self.semantic_rule(paths=['Assets/NotPresent.cs'])],
+        )
+        result = inspect(self.root)
+        self.assertEqual(len(result['semantic_checks']), 1)
+        self.assertEqual(result['semantic_checks'][0]['status'], 'not_evaluated')
+        self.assertNotIn('SEMANTIC_RULE_PLUGIN_NOT_SELECTED', [w['code'] for w in result['warnings']])
+        self.assertFalse(result['blocking'])
+
+    def test_semantic_rule_selected_plugin_version_mismatch_is_reported(self):
+        self.write_semantic_profile(
+            [{'id': 'unity', 'version': '0.0.0'}],
+            [self.semantic_rule()],
+        )
+        result = inspect(self.root)
+        self.assertIn('SEMANTIC_RULE_PLUGIN_VERSION_MISMATCH', [w['code'] for w in result['warnings']])
+        self.assertEqual(result['semantic_checks'], [])
+        self.assertFalse(result['blocking'])
+
     def test_profile_invalid_nonblocking(self):
         p=self.root/'.frameforge/profile.json';p.parent.mkdir();p.write_text('{bad')
         r=inspect(self.root);self.assertFalse(r['blocking']);self.assertEqual(r['warnings'][0]['code'],'PROFILE_INVALID')
